@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Configurer mon espace — Planify</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0F0F12;--ink2:#3A3A4A;--fog:#8A8A9A;--border:#E4E4EE;--bg:#F7F7FC;--card:#FFFFFF;
+  --gold:#C8922A;--gold-l:#FDF4E3;--gold-m:#F5E0B0;--green:#1A7F5A;--green-l:#E8F7F1;
+  --r:14px;--rs:8px;--sh:0 2px 8px rgba(15,15,18,.06),0 1px 2px rgba(15,15,18,.04)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:24px 18px 100px}
+.scr{display:none}.scr.on{display:block;animation:ri .25s ease}
+@keyframes ri{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(24px,6vw,30px);line-height:1.2;letter-spacing:-.02em}
+.h2{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(19px,5vw,22px);line-height:1.3;letter-spacing:-.015em}
+.eyebrow{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:10px}
+p.sub{font-size:14px;line-height:1.65;color:var(--fog);margin-top:8px}
+.divider{height:1px;background:var(--border);margin:20px 0}
+.btn{width:100%;padding:14px;border:none;border-radius:var(--r);font-size:15px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{filter:brightness(1.07)}
+.btn-ghost{background:transparent;color:var(--fog);font-size:13px;padding:10px}
+.btn:active{transform:scale(.98)}
+.btn-row{display:flex;flex-direction:column;gap:8px;margin-top:24px}
+.profile-card{background:var(--gold-l);border:1px solid var(--gold-m);border-radius:var(--r);padding:20px;text-align:center;margin-bottom:24px}
+.profile-emoji{font-size:48px;display:block;margin-bottom:8px}
+.profile-type{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--ink)}
+.profile-name{font-size:14px;color:var(--gold);margin-top:4px;font-weight:500}
+.notion-info{background:var(--green-l);border:1px solid #A7D7C5;border-radius:var(--r);padding:16px;margin-bottom:20px}
+.notion-info p{font-size:13px;line-height:1.6;color:#0D5C42}
+.proj-item{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;box-shadow:var(--sh)}
+.proj-row{display:flex;align-items:flex-start;gap:10px}
+.proj-num{width:26px;height:26px;background:var(--ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.proj-fields{flex:1;display:flex;flex-direction:column;gap:8px}
+.proj-name{width:100%;border:1.5px solid var(--border);border-radius:var(--rs);padding:9px 12px;font-size:14px;font-family:inherit;color:var(--ink);outline:none;transition:border-color .15s}
+.proj-name:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,146,42,.1)}
+.proj-meta{display:flex;gap:8px}
+.proj-ctx{flex:1;border:1.5px solid var(--border);border-radius:var(--rs);padding:8px 10px;font-size:13px;font-family:inherit;color:var(--ink);outline:none;background:var(--card);cursor:pointer}
+.proj-ctx:focus{border-color:var(--gold)}
+.proj-date{flex:1;border:1.5px solid var(--border);border-radius:var(--rs);padding:8px 10px;font-size:13px;font-family:inherit;color:var(--ink);outline:none}
+.proj-date:focus{border-color:var(--gold)}
+.proj-remove{background:none;border:none;color:var(--fog);font-size:18px;cursor:pointer;padding:2px 4px;flex-shrink:0;line-height:1;margin-top:2px}
+.proj-remove:hover{color:var(--ink)}
+.add-proj{width:100%;padding:11px;border:1.5px dashed var(--border);border-radius:var(--r);background:transparent;color:var(--fog);font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s;margin-top:4px}
+.add-proj:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-l)}
+.gen-wrap{display:flex;flex-direction:column;align-items:center;padding:72px 0;gap:18px;text-align:center}
+.spin{width:36px;height:36px;border:2.5px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gen-list{display:flex;flex-direction:column;gap:7px;width:100%;max-width:280px}
+.gs{font-size:13px;color:#ADADBF;transition:color .3s;text-align:left}
+.gs.active{color:var(--ink);font-weight:500}.gs.done{color:var(--green)}.gs.done::before{content:'✓  '}
+.done-hero{text-align:center;padding:32px 0 24px}
+.done-icon{font-size:64px;display:block;margin-bottom:16px}
+.link-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh)}
+.link-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--fog);margin-bottom:8px}
+.link-row{display:flex;align-items:center;gap:8px}
+.link-url{flex:1;font-size:12px;color:var(--fog);word-break:break-all;line-height:1.5;background:var(--bg);padding:8px 10px;border-radius:6px;border:1px solid var(--border)}
+.copy-btn{background:var(--gold-l);border:1px solid var(--gold-m);color:var(--gold);border-radius:6px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s}
+.copy-btn:hover{background:var(--gold);color:#fff}
+.open-btn{width:100%;padding:14px;background:var(--ink);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px;transition:all .15s}
+.open-btn:hover{filter:brightness(1.15)}
+.embed-steps{background:var(--green-l);border:1px solid #A7D7C5;border-radius:var(--r);padding:16px;margin-top:16px}
+.embed-steps p{font-size:13px;line-height:1.6;color:#0D5C42}
+.embed-steps ol{padding-left:18px;margin-top:8px}
+.embed-steps li{font-size:13px;color:#0D5C42;margin-bottom:4px;line-height:1.5}
+.error-screen{text-align:center;padding:60px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- WELCOME -->
+  <div class="scr on" id="s-welcome">
+    <div id="profile-display" class="profile-card"></div>
+    <div class="eyebrow" id="su-ey">Étape suivante</div>
+    <h1 class="h1" id="su-h">Configurer ton espace Notion</h1>
+    <p class="sub" id="su-p">L'outil va créer automatiquement un espace de planification dans Notion avec tes projets, tes tâches et ton check-in quotidien.</p>
+    <div class="divider"></div>
+    <div class="notion-info">
+      <p id="su-info">✓ Tes bases de données Projets, Tâches et Check-ins seront créées automatiquement.<br>✓ Tes projets du diagnostic seront déjà ajoutés.<br>✓ Tu recevras une URL à intégrer dans Notion pour ton check-in quotidien.</p>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="go('s-projects')" id="su-cta">Configurer mes projets →</button>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="scr" id="s-projects">
+    <div class="eyebrow" id="sp-ey">Tes projets</div>
+    <h2 class="h2" id="sp-h">Confirme et complète tes projets</h2>
+    <p class="sub" id="sp-p">Repris depuis ton diagnostic. Ajoute une deadline et un contexte si tu veux.</p>
+    <div class="divider"></div>
+    <div id="proj-list"></div>
+    <button class="add-proj" id="add-proj-btn" onclick="addProj()">+ Ajouter un projet</button>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="startSetup()" id="sp-cta">Créer mon espace Notion →</button>
+      <button class="btn btn-ghost" onclick="go('s-welcome')" id="sp-back">← Retour</button>
+    </div>
+  </div>
+
+  <!-- CREATING -->
+  <div class="scr" id="s-creating">
+    <div class="gen-wrap">
+      <div class="spin"></div>
+      <h2 class="h2" id="sc-h">Création de ton espace…</h2>
+      <p class="sub" id="sc-p">Quelques secondes.</p>
+      <div class="gen-list">
+        <div class="gs" id="gs1">Création de la page principale</div>
+        <div class="gs" id="gs2">Base de données Projets</div>
+        <div class="gs" id="gs3">Base de données Tâches</div>
+        <div class="gs" id="gs4">Base de données Check-ins</div>
+        <div class="gs" id="gs5">Ajout de tes projets</div>
+        <div class="gs" id="gs6">Finalisation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DONE -->
+  <div class="scr" id="s-done">
+    <div class="done-hero">
+      <span class="done-icon">🎉</span>
+      <h1 class="h1" id="sd-h">Ton espace est prêt</h1>
+      <p class="sub" id="sd-p">Tes bases de données ont été créées dans Notion.</p>
+    </div>
+
+    <div class="link-card">
+      <div class="link-label" id="sd-ws-label">Ouvrir l'espace Notion</div>
+      <button class="open-btn" id="sd-open-btn" onclick="openWorkspace()">Ouvrir dans Notion →</button>
+    </div>
+
+    <div class="link-card">
+      <div class="link-label" id="sd-embed-label">URL du check-in quotidien (à intégrer dans Notion)</div>
+      <div class="link-row">
+        <div class="link-url" id="sd-daily-url">—</div>
+        <button class="copy-btn" id="sd-copy-btn" onclick="copyUrl()">Copier</button>
+      </div>
+    </div>
+
+    <div class="embed-steps" id="sd-embed-steps">
+      <p><strong>Comment intégrer le check-in dans Notion :</strong></p>
+      <ol id="sd-steps-list">
+        <li>Ouvre ton espace Notion ci-dessus</li>
+        <li>Crée une nouvelle page "Tableau de bord" (ou "Daily")</li>
+        <li>Dans la page, tape <code>/embed</code></li>
+        <li>Colle l'URL du check-in ci-dessus</li>
+        <li>Ajuste la hauteur de l'embed à ~600px</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="scr" id="s-error">
+    <div class="error-screen">
+      <span style="font-size:48px;">⚠️</span>
+      <h2 class="h2" style="margin-top:16px;" id="err-h">Diagnostic introuvable</h2>
+      <p class="sub" id="err-p">Complète d'abord le diagnostic pour configurer ton espace.</p>
+      <div class="btn-row" style="max-width:300px;margin:24px auto 0;">
+        <button class="btn btn-gold" onclick="window.location.href='/'" id="err-cta">Faire le diagnostic →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const NOTION_PROXY = '/api/notion';
+let diag = null;
+let projects = [];
+let workspaceResult = null;
+let lang = 'fr';
+
+const T = {
+  fr:{
+    'su-ey':'Étape suivante','su-h':'Configurer ton espace Notion',
+    'su-p':'L\'outil va créer automatiquement un espace de planification dans Notion avec tes projets, tes tâches et ton check-in quotidien.',
+    'su-info':'✓ Tes bases de données Projets, Tâches et Check-ins seront créées automatiquement.<br>✓ Tes projets du diagnostic seront déjà ajoutés.<br>✓ Tu recevras une URL à intégrer dans Notion pour ton check-in quotidien.',
+    'su-cta':'Configurer mes projets →',
+    'sp-ey':'Tes projets','sp-h':'Confirme et complète tes projets',
+    'sp-p':'Repris depuis ton diagnostic. Modifie, ajoute une deadline ou du contexte.',
+    'sp-cta':'Créer mon espace Notion →','sp-back':'← Retour',
+    'add-proj':'+ Ajouter un projet',
+    'sc-h':'Création de ton espace…','sc-p':'Quelques secondes.',
+    'gs1':'Création de la page principale','gs2':'Base de données Projets',
+    'gs3':'Base de données Tâches','gs4':'Base de données Check-ins',
+    'gs5':'Ajout de tes projets','gs6':'Finalisation',
+    'sd-h':'Ton espace est prêt','sd-p':'Tes bases de données ont été créées dans Notion.',
+    'sd-ws-label':'Ouvrir l\'espace Notion','sd-open-btn':'Ouvrir dans Notion →',
+    'sd-embed-label':'URL du check-in quotidien (à intégrer dans Notion)',
+    'sd-copy-btn':'Copier',
+    'step1':'Ouvre ton espace Notion ci-dessus',
+    'step2':'Crée une nouvelle page "Tableau de bord"',
+    'step3':'Dans la page, tape <code>/embed</code>',
+    'step4':'Colle l\'URL du check-in ci-dessus',
+    'step5':'Ajuste la hauteur à ~600px',
+    'steps-title':'Comment intégrer le check-in dans Notion :',
+    'err-h':'Diagnostic introuvable','err-p':'Complète d\'abord le diagnostic pour configurer ton espace.',
+    'err-cta':'Faire le diagnostic →',
+    'ctx-opts':['Professionnel','Famille','Associatif','Personnel','Formation','Autre'],
+    'ph-name':'Nom du projet','ph-date':'Deadline (optionnel)',
+    'placeholder-profile':'Ton profil',
+  },
+  en:{
+    'su-ey':'Next step','su-h':'Set up your Notion workspace',
+    'su-p':'The tool will automatically create a planning workspace in Notion with your projects, tasks and daily check-in.',
+    'su-info':'✓ Your Projects, Tasks and Check-ins databases will be created automatically.<br>✓ Your diagnostic projects will already be added.<br>✓ You\'ll get a URL to embed in Notion for your daily check-in.',
+    'su-cta':'Configure my projects →',
+    'sp-ey':'Your projects','sp-h':'Confirm and complete your projects',
+    'sp-p':'Carried over from your diagnostic. Edit, add a deadline or context.',
+    'sp-cta':'Create my Notion workspace →','sp-back':'← Back',
+    'add-proj':'+ Add a project',
+    'sc-h':'Creating your workspace…','sc-p':'A few seconds.',
+    'gs1':'Creating main page','gs2':'Projects database',
+    'gs3':'Tasks database','gs4':'Check-ins database',
+    'gs5':'Adding your projects','gs6':'Finalizing',
+    'sd-h':'Your workspace is ready','sd-p':'Your databases have been created in Notion.',
+    'sd-ws-label':'Open Notion workspace','sd-open-btn':'Open in Notion →',
+    'sd-embed-label':'Daily check-in URL (to embed in Notion)',
+    'sd-copy-btn':'Copy',
+    'step1':'Open your Notion workspace above',
+    'step2':'Create a new page called "Dashboard"',
+    'step3':'In the page, type <code>/embed</code>',
+    'step4':'Paste the check-in URL above',
+    'step5':'Adjust height to ~600px',
+    'steps-title':'How to embed the check-in in Notion:',
+    'err-h':'Diagnostic not found','err-p':'Complete the diagnostic first to set up your workspace.',
+    'err-cta':'Do the diagnostic →',
+    'ctx-opts':['Professional','Family','Community','Personal','Learning','Other'],
+    'ph-name':'Project name','ph-date':'Deadline (optional)',
+    'placeholder-profile':'Your profile',
+  }
+};
+
+function applyT() {
+  const c = T[lang];
+  Object.keys(c).forEach(k => {
+    const el = document.getElementById(k);
+    if (!el) return;
+    if (k === 'su-info' || k === 'sd-embed-steps') el.innerHTML = c[k];
+    else el.textContent = c[k];
+  });
+  document.getElementById('add-proj-btn').textContent = c['add-proj'];
+  if (document.getElementById('sd-steps-list')) {
+    document.getElementById('sd-steps-list').innerHTML = ['step1','step2','step3','step4','step5']
+      .map(k=>`<li>${c[k]}</li>`).join('');
+    document.getElementById('sd-embed-steps').querySelector('p').innerHTML = `<strong>${c['steps-title']}</strong>`;
+  }
+}
+
+function go(id) {
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+
+function init() {
+  const raw = localStorage.getItem('planify_diag');
+  if (!raw) { go('s-error'); return; }
+  try { diag = JSON.parse(raw); } catch { go('s-error'); return; }
+  lang = diag.lang || 'fr';
+  applyT();
+
+  // Profile card
+  const pc = document.getElementById('profile-display');
+  pc.innerHTML = `<span class="profile-emoji">${diag.profile?.emoji || '🎯'}</span>
+    <div class="profile-type">${diag.profile?.type || T[lang]['placeholder-profile']}</div>
+    <div class="profile-name">${diag.name}</div>`;
+
+  // Pre-populate projects from engagements
+  const scored = (diag.engagements || []).filter(e=>e.name);
+  scored.forEach(e => {
+    projects.push({ id:'p'+Date.now()+Math.random(), name:e.name, context:'', deadline:'' });
+  });
+  if (!projects.length) projects.push({ id:'p'+Date.now(), name:'', context:'', deadline:'' });
+  renderProjects();
+}
+
+function renderProjects() {
+  const c = T[lang];
+  document.getElementById('proj-list').innerHTML = projects.map((p,i) => `
+    <div class="proj-item" id="proj-${p.id}">
+      <div class="proj-row">
+        <div class="proj-num">${i+1}</div>
+        <div class="proj-fields">
+          <input class="proj-name" type="text" value="${p.name}" placeholder="${c['ph-name']}" oninput="updProj('${p.id}','name',this.value)">
+          <div class="proj-meta">
+            <select class="proj-ctx" onchange="updProj('${p.id}','context',this.value)">
+              <option value="">— Contexte</option>
+              ${c['ctx-opts'].map((opt,j)=>`<option value="${['pro','family','asso','other','learning','other2'][j]}" ${p.context===['pro','family','asso','other','learning','other2'][j]?'selected':''}>${opt}</option>`).join('')}
+            </select>
+            <input class="proj-date" type="date" value="${p.deadline}" placeholder="${c['ph-date']}" onchange="updProj('${p.id}','deadline',this.value)">
+          </div>
+        </div>
+        ${projects.length>1?`<button class="proj-remove" onclick="removeProj('${p.id}')">×</button>`:''}
+      </div>
+    </div>`).join('');
+  document.getElementById('add-proj-btn').style.display = projects.length>=10 ? 'none' : '';
+}
+
+function addProj() {
+  if (projects.length>=10) return;
+  projects.push({id:'p'+Date.now(),name:'',context:'',deadline:''});
+  renderProjects();
+  setTimeout(()=>{const inputs=document.querySelectorAll('.proj-name');if(inputs.length)inputs[inputs.length-1].focus();},80);
+}
+function removeProj(id) { projects=projects.filter(p=>p.id!==id); renderProjects(); }
+function updProj(id, field, val) { const p=projects.find(x=>x.id===id); if(p) p[field]=val; }
+
+async function startSetup() {
+  const named = projects.filter(p=>p.name.trim());
+  if (!named.length) return;
+  go('s-creating');
+
+  const ids = ['gs1','gs2','gs3','gs4','gs5','gs6'];
+  let si = 0;
+  const tick = setInterval(()=>{
+    if(si>0){const prev=document.getElementById(ids[si-1]);if(prev){prev.classList.remove('active');prev.classList.add('done');}}
+    if(si<ids.length){document.getElementById(ids[si]).classList.add('active');si++;}
+    else clearInterval(tick);
+  }, 800);
+
+  try {
+    const r = await fetch(NOTION_PROXY, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        action:'create_workspace',
+        user_name: diag.name,
+        projects: named.map(p=>({name:p.name,context:p.context,deadline:p.deadline})),
+        lang: lang
+      })
+    });
+    const data = await r.json();
+    clearInterval(tick);
+    ids.forEach(id=>{const el=document.getElementById(id);if(el){el.classList.remove('active');el.classList.add('done');}});
+
+    if (!r.ok || !data.success) {
+      alert('Erreur : ' + (data.error||r.status));
+      go('s-projects'); return;
+    }
+
+    workspaceResult = data;
+    localStorage.setItem('planify_workspace', JSON.stringify(data));
+    renderDone(data);
+    go('s-done');
+
+  } catch(err) {
+    clearInterval(tick);
+    console.error(err);
+    alert('Erreur réseau : ' + err.message);
+    go('s-projects');
+  }
+}
+
+function renderDone(data) {
+  const c = T[lang];
+  document.getElementById('sd-open-btn').textContent = c['sd-open-btn'];
+  document.getElementById('sd-daily-url').textContent = data.daily_url || '—';
+}
+
+function openWorkspace() {
+  if (workspaceResult?.workspace_url) window.open(workspaceResult.workspace_url, '_blank');
+}
+
+function copyUrl() {
+  const url = document.getElementById('sd-daily-url').textContent;
+  if (!url || url==='—') return;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn = document.getElementById('sd-copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copié';
+    btn.style.background = 'var(--green)'; btn.style.color = '#fff'; btn.style.borderColor='var(--green)';
+    setTimeout(()=>{btn.textContent=orig;btn.style.background='';btn.style.color='';btn.style.borderColor='';},2000);
+  }).catch(()=>{
+    const el = document.getElementById('sd-daily-url');
+    el.select?.();
+    document.execCommand?.('copy');
+  });
+}
+
+init();
+</script>
+</body>
+</html>

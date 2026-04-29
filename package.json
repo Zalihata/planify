@@ -4,8 +4,8 @@
   "private": true,
   "description": "Outil de diagnostic de planification personnelle et professionnelle",
   "engines": {
-    "node": "18.x"
-  },
+  "node": "22.x"
+},
   "scripts": {
     "dev": "vercel dev",
     "deploy": "vercel --prod"

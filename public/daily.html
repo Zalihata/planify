@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Check-in — Planify</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0F0F12;--ink2:#3A3A4A;--fog:#8A8A9A;--border:#E4E4EE;--bg:#F7F7FC;--card:#FFFFFF;
+  --gold:#C8922A;--gold-l:#FDF4E3;--gold-m:#F5E0B0;
+  --green:#1A7F5A;--green-l:#E8F7F1;--red:#C02A2A;--amber:#D97706;
+  --r:12px;--rs:8px;--sh:0 2px 8px rgba(15,15,18,.06),0 1px 2px rgba(15,15,18,.04)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:480px;margin:0 auto;padding:16px 16px 80px}
+.scr{display:none}.scr.on{display:block;animation:ri .22s ease}
+@keyframes ri{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.h2{font-family:'Syne',sans-serif;font-weight:700;font-size:20px;line-height:1.3}
+p.sub{font-size:13px;line-height:1.6;color:var(--fog);margin-top:6px}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.day-header{padding:10px 0 4px}
+.day-greeting{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.01em}
+.day-date{font-size:12px;color:var(--fog);margin-top:3px}
+.mode-toggle{display:flex;background:var(--border);border-radius:20px;padding:3px;margin:12px 0}
+.mt-btn{flex:1;padding:6px;border-radius:16px;border:none;background:transparent;font-size:13px;font-weight:500;cursor:pointer;color:var(--fog);font-family:inherit;transition:all .15s}
+.mt-btn.on{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+/* Adapt card */
+.adapt-card{background:var(--gold-l);border:1px solid var(--gold-m);border-radius:var(--r);padding:12px 14px;font-size:13px;color:#5A3A0A;line-height:1.65;margin-bottom:12px;animation:ri .3s ease}
+.adapt-card .adapt-pattern{font-size:11px;color:var(--gold);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.adapt-loading{background:var(--border);border-radius:4px;height:12px;width:70%;animation:shimmer 1.5s infinite;margin-bottom:8px}
+.adapt-loading2{background:var(--border);border-radius:4px;height:12px;width:45%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{opacity:.4}50%{opacity:.8}100%{opacity:.4}}
+/* Energy */
+.energy-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+.en-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 4px;cursor:pointer;text-align:center;transition:all .15s;user-select:none}
+.en-btn .eicon{font-size:20px;display:block;margin-bottom:3px}
+.en-btn .elabel{font-size:10px;color:var(--fog);line-height:1.2}
+.en-btn.on{border-color:var(--gold);background:var(--gold-l)}
+.en-btn.on .elabel{color:#7A4A0A}
+/* Tasks */
+.sec-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fog);margin-bottom:8px}
+.task-item{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:11px 13px;margin-bottom:7px;cursor:pointer;display:flex;align-items:flex-start;gap:10px;transition:all .15s;box-shadow:var(--sh)}
+.task-item:hover{border-color:var(--gold-m)}
+.task-item.on{border-color:var(--gold);background:var(--gold-l)}
+.task-item.done-item{border-color:var(--green);background:var(--green-l)}
+.task-item.suggested{border-color:var(--gold-m);background:#FDFAF3}
+.task-chk{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px;transition:all .15s}
+.task-item.on .task-chk{background:var(--gold);border-color:var(--gold);color:#fff}
+.task-item.done-item .task-chk{background:var(--green);border-color:var(--green);color:#fff}
+.task-body{flex:1}
+.task-name{font-size:13px;font-weight:500;line-height:1.4}
+.task-meta{font-size:11px;color:var(--fog);margin-top:2px;display:flex;align-items:center;gap:6px}
+.task-item.on .task-name{color:#7A4A0A}
+.task-item.done-item .task-name{color:var(--green)}
+.suggest-badge{font-size:9px;background:var(--gold);color:#fff;border-radius:3px;padding:1px 5px;font-weight:700;letter-spacing:.04em}
+.empty-tasks{text-align:center;padding:20px;color:var(--fog);font-size:13px}
+/* Feeling */
+.feel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
+.feel-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s;user-select:none}
+.feel-btn .ficon{font-size:20px;display:block;margin-bottom:3px}
+.feel-btn .flabel{font-size:11px;color:var(--fog)}
+.feel-btn.on{border-color:var(--gold);background:var(--gold-l)}
+.feel-btn.on .flabel{color:#7A4A0A}
+/* Note */
+.note-area{width:100%;border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 12px;font-size:13px;font-family:inherit;color:var(--ink);outline:none;resize:none;background:var(--card);transition:border-color .15s}
+.note-area:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,146,42,.1)}
+/* Buttons */
+.btn{width:100%;padding:13px;border:none;border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;margin-top:16px}
+.btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{filter:brightness(1.07)}
+.btn-ghost{background:transparent;color:var(--fog);font-size:13px;padding:8px;margin-top:4px}
+.btn:active{transform:scale(.98)}
+/* Done */
+.done-wrap{text-align:center;padding:40px 0}
+.done-icon{font-size:56px;display:block;margin-bottom:12px}
+.done-msg{font-family:'Syne',sans-serif;font-size:20px;font-weight:800}
+.done-sub{font-size:13px;color:var(--fog);margin-top:8px;line-height:1.6}
+.err-wrap{text-align:center;padding:48px 0}
+.spin{width:28px;height:28px;border:2.5px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin:12px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.already-done{background:var(--green-l);border:1px solid #A7D7C5;border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:12px}
+/* Pattern summary pill */
+.pattern-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.pat-pill{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:11px;color:var(--fog);display:flex;align-items:center;gap:5px}
+.pat-pill strong{color:var(--ink2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="scr on" id="s-load">
+    <div style="text-align:center;padding:60px 0">
+      <div class="spin"></div>
+      <p style="color:var(--fog);font-size:13px;margin-top:8px" id="load-msg">Chargement…</p>
+    </div>
+  </div>
+
+  <div class="scr" id="s-error">
+    <div class="err-wrap">
+      <span style="font-size:48px">⚠️</span>
+      <h2 class="h2" style="margin-top:14px" id="err-h">Page non configurée</h2>
+      <p class="sub" id="err-p">Cette page doit être intégrée depuis ton espace Planify.</p>
+    </div>
+  </div>
+
+  <div class="scr" id="s-morning">
+    <div class="day-header">
+      <div class="day-greeting" id="m-greeting">Bonjour</div>
+      <div class="day-date" id="m-date"></div>
+    </div>
+    <div class="mode-toggle">
+      <button class="mt-btn on" id="toggle-m" onclick="setMode('morning')">🌅 Matin</button>
+      <button class="mt-btn" id="toggle-e" onclick="setMode('evening')">🌙 Soir</button>
+    </div>
+    <div class="divider"></div>
+
+    <div id="m-done-notice" class="already-done" style="display:none"></div>
+
+    <!-- Adaptation area — remplie async -->
+    <div id="m-adapt-area"></div>
+
+    <div class="sec-label" id="m-energy-label">Mon énergie ce matin</div>
+    <div class="energy-grid" id="m-energy-grid"></div>
+
+    <div class="divider"></div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div class="sec-label" style="margin-bottom:0" id="m-tasks-label">Mes 3 priorités aujourd'hui</div>
+      <div id="m-sel-count" style="font-size:11px;color:var(--fog)">0 / 3</div>
+    </div>
+    <div id="m-tasks-wrap">
+      <div class="spin" style="margin:16px auto"></div>
+    </div>
+
+    <button class="btn btn-gold" onclick="submitMorning()" id="m-submit">Démarrer ma journée →</button>
+  </div>
+
+  <div class="scr" id="s-evening">
+    <div class="day-header">
+      <div class="day-greeting" id="e-greeting">Bonsoir</div>
+      <div class="day-date" id="e-date"></div>
+    </div>
+    <div class="mode-toggle">
+      <button class="mt-btn" id="toggle-m2" onclick="setMode('morning')">🌅 Matin</button>
+      <button class="mt-btn on" id="toggle-e2" onclick="setMode('evening')">🌙 Soir</button>
+    </div>
+    <div class="divider"></div>
+    <div id="e-done-notice" class="already-done" style="display:none"></div>
+
+    <div class="sec-label" id="e-tasks-label">Tâches accomplies aujourd'hui</div>
+    <div id="e-tasks-wrap"><div class="spin" style="margin:16px auto"></div></div>
+
+    <div class="divider"></div>
+
+    <div class="sec-label" id="e-feel-label">Comment je me sens</div>
+    <div class="feel-grid" id="e-feel-grid"></div>
+
+    <div style="margin-top:12px">
+      <div class="sec-label" id="e-note-label">Une note <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--fog)">(optionnel)</span></div>
+      <textarea class="note-area" id="e-note" rows="2" placeholder="Blocage, observation, idée…"></textarea>
+    </div>
+
+    <button class="btn btn-gold" onclick="submitEvening()" id="e-submit">Clore ma journée →</button>
+  </div>
+
+  <div class="scr" id="s-done-m">
+    <div class="done-wrap">
+      <span class="done-icon">☀️</span>
+      <div class="done-msg" id="dm-msg">C'est parti !</div>
+      <p class="done-sub" id="dm-sub">Tes priorités sont enregistrées. Reviens ce soir pour clore ta journée.</p>
+      <button class="btn btn-ghost" onclick="setMode('evening')" id="dm-soir">Passer au bilan du soir →</button>
+    </div>
+  </div>
+
+  <div class="scr" id="s-done-e">
+    <div class="done-wrap">
+      <span class="done-icon">🌙</span>
+      <div class="done-msg" id="de-msg">Journée enregistrée.</div>
+      <p class="done-sub" id="de-sub">Bonne soirée. À demain.</p>
+    </div>
+  </div>
+
+</div>
+<script>
+const CLAUDE_PROXY = '/api/proxy';
+const NOTION_PROXY = '/api/notion';
+
+const params = new URLSearchParams(window.location.search);
+const P = {
+  name: params.get('n') || '',
+  ci:   params.get('ci') || '',
+  t:    params.get('t') || '',
+  p:    params.get('p') || '',
+  lang: params.get('lang') || 'fr'
+};
+const lang = P.lang;
+const isFR = lang === 'fr';
+
+const C = {
+  fr:{
+    energyOpts:[{v:'1 — Épuisé·e',icon:'😴',label:'Épuisé·e'},{v:'2 — Fatigué·e',icon:'😪',label:'Fatigué·e'},{v:'3 — Correct·e',icon:'😐',label:'Correct'},{v:'4 — Bon·ne',icon:'🙂',label:'Bien'},{v:'5 — Excellent·e',icon:'💪',label:'Excellent'}],
+    feelOpts:[{v:'Bien',icon:'😊',label:'Bien'},{v:'Motivé·e',icon:'🔥',label:'Motivé·e'},{v:'Fatigué·e',icon:'😪',label:'Fatigué·e'},{v:'Difficile',icon:'😓',label:'Difficile'},{v:'Stressé·e',icon:'😰',label:'Stressé·e'},{v:'Neutre',icon:'😶',label:'Neutre'}],
+    days:['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'],
+    months:['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],
+    greetM:n=>`Bonjour, ${n} 👋`,greetE:n=>`Bonsoir, ${n} 🌙`,
+    dmMsg:n=>`C'est parti, ${n} !`,deMsg:n=>`Journée enregistrée, ${n}.`,
+    noTasks:'Aucune tâche planifiée — tu peux quand même enregistrer ton énergie.',
+    alreadyM:'Déjà enregistré ce matin.',alreadyE:'Bilan du soir déjà enregistré.',
+    suggBadge:'→',patLabel:'Données des dernières semaines',
+    selCount:(n,m)=>`${n} / ${m}`,
+    adaptLoading:'Analyse des patterns en cours…'
+  },
+  en:{
+    energyOpts:[{v:'1 — Exhausted',icon:'😴',label:'Exhausted'},{v:'2 — Tired',icon:'😪',label:'Tired'},{v:'3 — Okay',icon:'😐',label:'Okay'},{v:'4 — Good',icon:'🙂',label:'Good'},{v:'5 — Excellent',icon:'💪',label:'Excellent'}],
+    feelOpts:[{v:'Good',icon:'😊',label:'Good'},{v:'Motivated',icon:'🔥',label:'Motivated'},{v:'Tired',icon:'😪',label:'Tired'},{v:'Difficult',icon:'😓',label:'Difficult'},{v:'Stressed',icon:'😰',label:'Stressed'},{v:'Neutral',icon:'😶',label:'Neutral'}],
+    days:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    months:['January','February','March','April','May','June','July','August','September','October','November','December'],
+    greetM:n=>`Good morning, ${n} 👋`,greetE:n=>`Good evening, ${n} 🌙`,
+    dmMsg:n=>`Let's go, ${n}!`,deMsg:n=>`Day logged, ${n}.`,
+    noTasks:'No tasks scheduled — you can still log your energy.',
+    alreadyM:'Already logged this morning.',alreadyE:'Evening check-out already recorded.',
+    suggBadge:'→',patLabel:'Data from recent weeks',
+    selCount:(n,m)=>`${n} / ${m}`,
+    adaptLoading:'Analyzing patterns…'
+  }
+};
+const c = C[lang] || C.fr;
+
+let mode = 'morning';
+let tasks = [];
+let selectedTasks = [];
+let selectedEnergy = '';
+let selectedFeel = '';
+let morningCheckinId = null;
+let checkinHistory = [];
+let adaptation = null; // { message, suggested_ids, pattern }
+let adaptationLoaded = false;
+
+function go(id) { document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on')); document.getElementById(id)?.classList.add('on'); }
+function setMode(m) { mode=m; if(m==='morning'){go('s-morning');renderMorning();}else{go('s-evening');renderEvening();} }
+function todayStr() { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function fmtDate(iso) { const d=new Date(iso+'T00:00:00'); return `${c.days[d.getDay()]} ${d.getDate()} ${c.months[d.getMonth()]}`; }
+function dayOfWeek(iso) { return new Date(iso+'T00:00:00').getDay(); }
+
+async function nCall(action, payload={}) {
+  const r = await fetch(NOTION_PROXY, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action,...payload}) });
+  return r.json();
+}
+
+// ── PARSERS ──────────────────────────────────────────────────────────────────
+
+function parseTasks(data) {
+  return (data.results||[]).map(p => {
+    const props = p.properties||{};
+    const titleProp = Object.values(props).find(v=>v.type==='title');
+    const name = titleProp?.title?.[0]?.plain_text || '';
+    const statut = props['Statut']?.select?.name || '';
+    const date = props['Date']?.date?.start || '';
+    return { id:p.id, name, statut, date };
+  }).filter(t=>t.name);
+}
+
+function parseCheckins(results) {
+  const energyProp = isFR ? 'Énergie' : 'Energy';
+  const faitesProp = isFR ? 'Tâches faites' : 'Tasks done';
+  const ressentiProp = isFR ? 'Ressenti' : 'Feeling';
+  return results.map(p => {
+    const props = p.properties||{};
+    const energyStr = props[energyProp]?.select?.name || props['Energie']?.select?.name || '';
+    const energyNum = parseInt(energyStr[0]) || 0;
+    return {
+      date: props['Date']?.date?.start || '',
+      dow: dayOfWeek(props['Date']?.date?.start || todayStr()),
+      moment: props['Moment']?.select?.name || '',
+      energyNum,
+      energyStr,
+      tachesFaites: props[faitesProp]?.number || 0,
+      ressenti: props[ressentiProp]?.select?.name || '',
+      notes: props['Notes']?.rich_text?.[0]?.plain_text || ''
+    };
+  }).filter(c=>c.date&&c.energyNum>0);
+}
+
+// ── DATA LOADING ──────────────────────────────────────────────────────────────
+
+async function loadTasks() {
+  if (!P.t) { document.getElementById('m-tasks-wrap').innerHTML=`<div class="empty-tasks">${c.noTasks}</div>`; return; }
+  try {
+    const data = await nCall('get_tasks_upcoming', { database_id:P.t, lang });
+    tasks = parseTasks(data);
+    renderTaskSelection();
+  } catch(e) { document.getElementById('m-tasks-wrap').innerHTML=`<div class="empty-tasks">${c.noTasks}</div>`; }
+}
+
+async function loadHistory() {
+  if (!P.ci) return;
+  try {
+    const data = await nCall('get_checkins_history', { database_id:P.ci, limit:28 });
+    checkinHistory = parseCheckins(data.results||[]);
+  } catch(e) { console.error('loadHistory:', e); }
+}
+
+// ── PATTERNS (computed client-side) ─────────────────────────────────────────
+
+function computePatterns() {
+  if (checkinHistory.length < 3) return null;
+
+  const todayDow = new Date().getDay();
+
+  // Énergie moyenne par jour de semaine
+  const byDow = {};
+  checkinHistory.forEach(ch => {
+    if (!byDow[ch.dow]) byDow[ch.dow] = [];
+    byDow[ch.dow].push(ch.energyNum);
+  });
+  const avgEnergyToday = byDow[todayDow]
+    ? byDow[todayDow].reduce((a,b)=>a+b,0)/byDow[todayDow].length
+    : null;
+
+  // Taux de complétion moyen
+  const withCompletion = checkinHistory.filter(ch=>ch.tachesFaites>0);
+  const avgCompletion = withCompletion.length
+    ? withCompletion.reduce((a,b)=>a+b.tachesFaites,0)/withCompletion.length
+    : null;
+
+  // Énergie globale récente (7 derniers jours)
+  const recent = checkinHistory.slice(0,7);
+  const avgRecent = recent.length
+    ? recent.reduce((a,b)=>a+b.energyNum,0)/recent.length
+    : null;
+
+  // Blocages récents
+  const blocages = checkinHistory.filter(ch=>ch.notes).map(ch=>ch.notes).slice(0,3);
+
+  return { todayDow, avgEnergyToday, avgCompletion, avgRecent, blocages, nCheckins: checkinHistory.length };
+}
+
+// ── ADAPTATION (Claude call) ──────────────────────────────────────────────────
+
+async function loadAdaptation() {
+  if (checkinHistory.length < 5) { adaptationLoaded=true; return; }
+
+  const cacheKey = `planify_adapt_${todayStr()}`;
+  const cached = sessionStorage.getItem(cacheKey);
+  if (cached) {
+    try { adaptation=JSON.parse(cached); adaptationLoaded=true; updateAdaptDisplay(); return; } catch {}
+  }
+
+  const patterns = computePatterns();
+  if (!patterns) { adaptationLoaded=true; return; }
+
+  const histStr = checkinHistory.slice(0,10).map(ch => {
+    const dn = c.days[ch.dow]||ch.dow;
+    return `${ch.date}|${dn}|E${ch.energyNum}|${ch.tachesFaites}f|${ch.ressenti}${ch.notes?'|'+ch.notes.slice(0,40):''}`;
+  }).join('\n');
+
+  const taskStr = tasks.slice(0,8).map(t=>`[${t.id.replace(/-/g,'').slice(0,8)}] ${t.name}`).join('\n');
+
+  const todayDayName = c.days[new Date().getDay()];
+
+  const prompt = isFR
+    ? `Assistant de planification. Analyse les check-ins de ${P.name} et propose une adaptation pour aujourd'hui.
+
+Aujourd'hui : ${todayDayName} ${todayStr()}
+Check-ins récents (date|jour|énergie|tâches faites|ressenti|note) :
+${histStr}
+
+Tâches disponibles (id8|nom) :
+${taskStr}
+
+Patterns calculés :
+- Énergie moyenne les ${todayDayName}s : ${patterns.avgEnergyToday?.toFixed(1)||'–'}/5
+- Énergie récente (7j) : ${patterns.avgRecent?.toFixed(1)||'–'}/5
+- Tâches faites en moyenne : ${patterns.avgCompletion?.toFixed(1)||'–'}
+
+Génère uniquement ce JSON, sans backticks ni texte :
+{"message":"1-2 phrases directes et factuelles basées sur les patterns observés. Tutoie ${P.name}. Factuel, sans jugement de valeur.","suggested_ids":["id8_1","id8_2","id8_3"],"pattern_label":"résumé ultra-court du pattern observé (ex: Énergie stable les lundis)"}`
+    : `Planning assistant. Analyze ${P.name}'s check-ins and suggest an adaptation for today.
+
+Today: ${todayDayName} ${todayStr()}
+Recent check-ins (date|day|energy|tasks done|feeling|note):
+${histStr}
+
+Available tasks (id8|name):
+${taskStr}
+
+Computed patterns:
+- Average energy on ${todayDayName}s: ${patterns.avgEnergyToday?.toFixed(1)||'–'}/5
+- Recent energy (7d): ${patterns.avgRecent?.toFixed(1)||'–'}/5
+- Average tasks done: ${patterns.avgCompletion?.toFixed(1)||'–'}
+
+Generate only this JSON, no backticks or surrounding text:
+{"message":"1-2 direct factual sentences based on observed patterns. Address ${P.name} directly. Factual, no value judgment.","suggested_ids":["id8_1","id8_2","id8_3"],"pattern_label":"ultra-short observed pattern summary (e.g. Stable energy on Mondays)"}`;
+
+  try {
+    const r = await fetch(CLAUDE_PROXY, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:300, messages:[{role:'user',content:prompt}] })
+    });
+    const d = await r.json();
+    const text = d.content?.[0]?.text || '';
+    const clean = text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+    adaptation = JSON.parse(clean);
+    sessionStorage.setItem(cacheKey, JSON.stringify(adaptation));
+  } catch(e) { console.error('loadAdaptation:', e); adaptation=null; }
+
+  adaptationLoaded = true;
+  updateAdaptDisplay();
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+
+function isSuggested(taskId) {
+  if (!adaptation?.suggested_ids?.length) return false;
+  const clean = taskId.replace(/-/g,'');
+  return adaptation.suggested_ids.some(sid => clean.startsWith(sid) || sid.startsWith(clean.slice(0,8)));
+}
+
+function sortedTasks() {
+  if (!adaptation?.suggested_ids?.length) return tasks;
+  return [...tasks].sort((a,b) => (isSuggested(a.id)?0:1)-(isSuggested(b.id)?0:1));
+}
+
+function renderTaskSelection() {
+  const wrap = document.getElementById('m-tasks-wrap');
+  const list = sortedTasks();
+  if (!list.length) { wrap.innerHTML=`<div class="empty-tasks">${c.noTasks}</div>`; return; }
+  const maxSel = 3;
+  wrap.innerHTML = list.map(t => {
+    const on = selectedTasks.includes(t.id);
+    const sugg = isSuggested(t.id);
+    return `<div class="task-item ${on?'on':sugg&&!on?'suggested':''}" onclick="tglTask('${t.id}')">
+      <div class="task-chk">${on?'✓':''}</div>
+      <div class="task-body">
+        <div class="task-name">${t.name}</div>
+        <div class="task-meta">${t.date?fmtDate(t.date):''}${sugg?`<span class="suggest-badge">${c.suggBadge}</span>`:''}</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('m-sel-count').textContent = c.selCount(selectedTasks.length, maxSel);
+}
+
+function tglTask(id) {
+  if (selectedTasks.includes(id)) { selectedTasks=selectedTasks.filter(x=>x!==id); }
+  else { if(selectedTasks.length>=3) return; selectedTasks.push(id); }
+  renderTaskSelection();
+}
+
+function renderEnergyGrid() {
+  document.getElementById('m-energy-grid').innerHTML = c.energyOpts.map(opt =>
+    `<div class="en-btn ${selectedEnergy===opt.v?'on':''}" onclick="selEnergy('${opt.v}')">
+      <span class="eicon">${opt.icon}</span><span class="elabel">${opt.label}</span>
+    </div>`).join('');
+}
+function selEnergy(v) { selectedEnergy=v; renderEnergyGrid(); }
+
+function renderFeelGrid() {
+  document.getElementById('e-feel-grid').innerHTML = c.feelOpts.map(opt =>
+    `<div class="feel-btn ${selectedFeel===opt.v?'on':''}" onclick="selFeel('${opt.v}')">
+      <span class="ficon">${opt.icon}</span><span class="flabel">${opt.label}</span>
+    </div>`).join('');
+}
+function selFeel(v) { selectedFeel=v; renderFeelGrid(); }
+
+function updateAdaptDisplay() {
+  const area = document.getElementById('m-adapt-area');
+  if (!area) return;
+  if (!adaptation?.message) { area.innerHTML=''; return; }
+  area.innerHTML = `<div class="adapt-card">
+    ${adaptation.pattern_label?`<div class="adapt-pattern">${adaptation.pattern_label}</div>`:''}
+    ${adaptation.message}
+  </div>`;
+  // Re-render tasks with suggestions now available
+  renderTaskSelection();
+}
+
+function renderMorning() {
+  const today = todayStr();
+  document.getElementById('m-greeting').textContent = c.greetM(P.name);
+  document.getElementById('m-date').textContent = fmtDate(today);
+  document.getElementById('e-date').textContent = fmtDate(today);
+  document.getElementById('m-energy-label').textContent = isFR?'Mon énergie ce matin':'My energy this morning';
+  document.getElementById('m-tasks-label').textContent = isFR?'Mes 3 priorités aujourd\'hui':'My 3 priorities today';
+  document.getElementById('m-submit').textContent = isFR?'Démarrer ma journée →':'Start my day →';
+  document.getElementById('toggle-m').textContent = '🌅 '+(isFR?'Matin':'Morning');
+  document.getElementById('toggle-e').textContent = '🌙 '+(isFR?'Soir':'Evening');
+  document.getElementById('toggle-m').classList.add('on'); document.getElementById('toggle-e').classList.remove('on');
+  renderEnergyGrid();
+  renderTaskSelection();
+  // Restore morning session if exists
+  const stored = sessionStorage.getItem('planify_morning_'+today);
+  if (stored) {
+    const data = JSON.parse(stored);
+    morningCheckinId=data.id; selectedEnergy=data.energie||''; selectedTasks=data.tasks||[];
+    document.getElementById('m-done-notice').style.display='block';
+    document.getElementById('m-done-notice').textContent = c.alreadyM;
+    renderEnergyGrid(); renderTaskSelection();
+  }
+  // Show adaptation if already loaded
+  if (adaptationLoaded) updateAdaptDisplay();
+  else {
+    // Show skeleton while loading
+    if (checkinHistory.length>=5) {
+      document.getElementById('m-adapt-area').innerHTML = `<div class="adapt-card"><div class="adapt-loading"></div><div class="adapt-loading2"></div></div>`;
+    }
+  }
+}
+
+function renderEvening() {
+  const today = todayStr();
+  document.getElementById('e-greeting').textContent = c.greetE(P.name);
+  document.getElementById('e-date').textContent = fmtDate(today);
+  document.getElementById('e-tasks-label').textContent = isFR?'Tâches accomplies aujourd\'hui':'Tasks accomplished today';
+  document.getElementById('e-feel-label').textContent = isFR?'Comment je me sens':'How I feel';
+  document.getElementById('e-note-label').textContent = isFR?'Une note':'A note';
+  document.getElementById('e-note').placeholder = isFR?'Blocage, observation, idée…':'Blocker, observation, idea…';
+  document.getElementById('e-submit').textContent = isFR?'Clore ma journée →':'Close my day →';
+  document.getElementById('toggle-m2').textContent = '🌅 '+(isFR?'Matin':'Morning');
+  document.getElementById('toggle-e2').textContent = '🌙 '+(isFR?'Soir':'Evening');
+  document.getElementById('toggle-m2').classList.remove('on'); document.getElementById('toggle-e2').classList.add('on');
+  renderFeelGrid();
+  // Evening task list = tasks selected this morning, or all recent tasks
+  const stored = sessionStorage.getItem('planify_morning_'+today);
+  const morningTasks = stored ? (JSON.parse(stored).tasks||[]).map(id=>tasks.find(t=>t.id===id)).filter(Boolean) : [];
+  const eveningList = morningTasks.length ? morningTasks : tasks.slice(0,5);
+  const wrap = document.getElementById('e-tasks-wrap');
+  if (!eveningList.length) { wrap.innerHTML=`<div class="empty-tasks">${c.noTasks}</div>`; return; }
+  wrap.innerHTML = eveningList.map(t => `
+    <div class="task-item" data-tid="${t.id}" onclick="tglDone(this)">
+      <div class="task-chk"></div>
+      <div class="task-body"><div class="task-name">${t.name}</div></div>
+    </div>`).join('');
+  if (sessionStorage.getItem('planify_evening_'+today)) {
+    document.getElementById('e-done-notice').style.display='block';
+    document.getElementById('e-done-notice').textContent = c.alreadyE;
+  }
+}
+
+function tglDone(el) {
+  el.classList.toggle('done-item');
+  el.querySelector('.task-chk').textContent = el.classList.contains('done-item')?'✓':'';
+}
+
+// ── SUBMIT ────────────────────────────────────────────────────────────────────
+
+async function submitMorning() {
+  if (!selectedEnergy) { renderEnergyGrid(); return; }
+  const today = todayStr();
+  const taskNames = selectedTasks.map(id=>tasks.find(t=>t.id===id)?.name||'').filter(Boolean).join(', ');
+  const btn = document.getElementById('m-submit');
+  btn.textContent='…'; btn.disabled=true;
+  try {
+    if (P.ci) {
+      const data = await nCall('create_checkin_morning', { database_id:P.ci, date:today, energie:selectedEnergy, tasks_planned:taskNames, lang });
+      morningCheckinId=data.id;
+      sessionStorage.setItem('planify_morning_'+today, JSON.stringify({id:data.id,energie:selectedEnergy,tasks:selectedTasks}));
+    }
+    document.getElementById('dm-msg').textContent=c.dmMsg(P.name);
+    document.getElementById('dm-sub').textContent=isFR?'Tes priorités sont enregistrées. Reviens ce soir pour clore ta journée.':'Your priorities are saved. Come back tonight to close your day.';
+    document.getElementById('dm-soir').textContent=isFR?'Passer au bilan du soir →':'Go to evening check-out →';
+    go('s-done-m');
+  } catch(e) { console.error(e); btn.textContent=isFR?'Démarrer ma journée →':'Start my day →'; btn.disabled=false; }
+}
+
+async function submitEvening() {
+  if (!selectedFeel) { renderFeelGrid(); return; }
+  const today = todayStr();
+  const done = [...document.querySelectorAll('#e-tasks-wrap .done-item')].length;
+  const note = document.getElementById('e-note').value.trim();
+  const btn = document.getElementById('e-submit');
+  btn.textContent='…'; btn.disabled=true;
+  try {
+    if (P.ci) {
+      const stored = sessionStorage.getItem('planify_morning_'+today);
+      const pageId = morningCheckinId || (stored && JSON.parse(stored).id);
+      if (pageId) {
+        await nCall('update_checkin_evening', { page_id:pageId, date:today, taches_faites:done, ressenti:selectedFeel, notes:note, lang });
+      } else {
+        const d = await nCall('create_checkin_morning', { database_id:P.ci, date:today, energie:c.energyOpts[2].v, tasks_planned:'', lang });
+        await nCall('update_checkin_evening', { page_id:d.id, date:today, taches_faites:done, ressenti:selectedFeel, notes:note, lang });
+      }
+    }
+    sessionStorage.setItem('planify_evening_'+today,'1');
+    document.getElementById('de-msg').textContent=c.deMsg(P.name);
+    document.getElementById('de-sub').textContent=isFR?'Bonne soirée. À demain.':'Good evening. See you tomorrow.';
+    go('s-done-e');
+  } catch(e) { console.error(e); btn.textContent=isFR?'Clore ma journée →':'Close my day →'; btn.disabled=false; }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+async function init() {
+  if (!P.name || !P.ci || !P.t) { go('s-error'); return; }
+
+  // Chargement critique (tâches + historique en parallèle)
+  await Promise.all([loadTasks(), loadHistory()]);
+
+  // Détecte mode et affiche l'interface immédiatement
+  const h = new Date().getHours();
+  mode = h >= 13 ? 'evening' : 'morning';
+  if (mode === 'morning') { go('s-morning'); renderMorning(); }
+  else { go('s-evening'); renderEvening(); renderMorning(); }
+
+  // Adaptation Claude en arrière-plan (non-bloquant)
+  if (checkinHistory.length >= 5) {
+    loadAdaptation(); // ne pas attendre — met à jour le DOM quand prêt
+  } else {
+    adaptationLoaded = true;
+  }
+}
+
+init();
+</script>
+</body>
+</html>

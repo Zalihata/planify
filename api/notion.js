@@ -132,7 +132,7 @@ export default async function handler(req, res) {
       if (!pg.ok) return res.status(pg.status).json({ error:'Failed to create page', details:pg.data });
       const pageId = pg.data.id;
 
-      // 2 — Base Projets
+      // 2 — Base Projets (Contexte = multi_select pour couvrir plusieurs catégories)
       const ctxOpts = isFR
         ? [{name:'Professionnel',color:'blue'},{name:'Famille',color:'orange'},{name:'Associatif',color:'green'},{name:'Personnel',color:'purple'},{name:'Formation',color:'yellow'}]
         : [{name:'Professional',color:'blue'},{name:'Family',color:'orange'},{name:'Community',color:'green'},{name:'Personal',color:'purple'},{name:'Learning',color:'yellow'}];
@@ -141,7 +141,7 @@ export default async function handler(req, res) {
         title:[{type:'text',text:{content:isFR?'Projets':'Projects'}}],
         properties:{
           [isFR?'Nom':'Name']:{title:{}},
-          'Contexte':{select:{options:ctxOpts}},
+          'Contexte':{multi_select:{options:ctxOpts}},
           'Statut':{select:{options:[{name:isFR?'Idée':'Idea',color:'gray'},{name:isFR?'En cours':'In progress',color:'blue'},{name:isFR?'En pause':'On hold',color:'yellow'},{name:isFR?'Terminé':'Completed',color:'green'}]}},
           [isFR?'Début':'Start']:{date:{}},
           'Deadline':{date:{}},
@@ -152,7 +152,7 @@ export default async function handler(req, res) {
       if (!projDB.ok) return res.status(projDB.status).json({ error:'Failed to create Projets DB', details:projDB.data });
       const projDbId = projDB.data.id;
 
-      // 3 — Base Tâches (avec relation vers Projets)
+      // 3 — Base Tâches
       const tachesDB = await nFetch(`${NOTION_API}/databases`, { method:'POST', headers:h(token), body: JSON.stringify({
         parent:{type:'page_id',page_id:pageId}, icon:{type:'emoji',emoji:'✅'},
         title:[{type:'text',text:{content:isFR?'Tâches':'Tasks'}}],
@@ -176,47 +176,92 @@ export default async function handler(req, res) {
           [isFR?'Titre':'Title']:{title:{}},
           'Date':{date:{}},
           'Moment':{select:{options:[{name:isFR?'Matin':'Morning',color:'yellow'},{name:isFR?'Soir':'Evening',color:'blue'},{name:isFR?'Complet':'Complete',color:'green'}]}},
-          [isFR?'Énergie':'Energy']:{select:{options:[
-            {name:'1 — '+(isFR?'Épuisé·e':'Exhausted'),color:'red'},
-            {name:'2 — '+(isFR?'Fatigué·e':'Tired'),color:'orange'},
-            {name:'3 — '+(isFR?'Correct·e':'Okay'),color:'yellow'},
-            {name:'4 — '+(isFR?'Bon·ne':'Good'),color:'blue'},
-            {name:'5 — '+(isFR?'Excellent·e':'Excellent'),color:'green'}
-          ]}},
+          [isFR?'Énergie':'Energy']:{select:{options:[{name:'1 — '+(isFR?'Épuisé·e':'Exhausted'),color:'red'},{name:'2 — '+(isFR?'Fatigué·e':'Tired'),color:'orange'},{name:'3 — '+(isFR?'Correct·e':'Okay'),color:'yellow'},{name:'4 — '+(isFR?'Bon·ne':'Good'),color:'blue'},{name:'5 — '+(isFR?'Excellent·e':'Excellent'),color:'green'}]}},
           [isFR?'Tâches prévues':'Planned tasks']:{rich_text:{}},
           [isFR?'Tâches faites':'Tasks done']:{number:{format:'number'}},
-          [isFR?'Ressenti':'Feeling']:{select:{options:[
-            {name:isFR?'Bien':'Good',color:'green'},{name:isFR?'Motivé·e':'Motivated',color:'blue'},
-            {name:isFR?'Fatigué·e':'Tired',color:'orange'},{name:isFR?'Difficile':'Difficult',color:'red'},
-            {name:isFR?'Stressé·e':'Stressed',color:'yellow'},{name:isFR?'Neutre':'Neutral',color:'gray'}
-          ]}},
+          [isFR?'Ressenti':'Feeling']:{select:{options:[{name:isFR?'Bien':'Good',color:'green'},{name:isFR?'Motivé·e':'Motivated',color:'blue'},{name:isFR?'Fatigué·e':'Tired',color:'orange'},{name:isFR?'Difficile':'Difficult',color:'red'},{name:isFR?'Stressé·e':'Stressed',color:'yellow'},{name:isFR?'Neutre':'Neutral',color:'gray'}]}},
           [isFR?'Notes':'Notes']:{rich_text:{}}
         }
       }) });
       if (!ciDB.ok) return res.status(ciDB.status).json({ error:'Failed to create Check-ins DB', details:ciDB.data });
       const ciDbId = ciDB.data.id;
 
-      // 5 — Projets initiaux
-      const ctxMap = {pro:isFR?'Professionnel':'Professional',family:isFR?'Famille':'Family',asso:isFR?'Associatif':'Community',biz:isFR?'Professionnel':'Professional',learning:isFR?'Formation':'Learning',other:isFR?'Personnel':'Personal',other2:isFR?'Personnel':'Personal','':[isFR?'Personnel':'Personal']};
+      // 5 — Projets + tâches initiales
+      const ctxMap = {pro:isFR?'Professionnel':'Professional',family:isFR?'Famille':'Family',asso:isFR?'Associatif':'Community',biz:isFR?'Professionnel':'Professional',learning:isFR?'Formation':'Learning',other:isFR?'Personnel':'Personal'};
+      const projPageMap = {}; // name → page_id pour lier les tâches
       for (const proj of (projects||[]).slice(0,10)) {
         if (!proj.name?.trim()) continue;
-        await nFetch(`${NOTION_API}/pages`, { method:'POST', headers:h(token), body: JSON.stringify({
+        const ctxNames = ((proj.contexts&&proj.contexts.length)?proj.contexts:[proj.context||'other']).map(c=>ctxMap[c]).filter(Boolean);
+        const pr = await nFetch(`${NOTION_API}/pages`, { method:'POST', headers:h(token), body: JSON.stringify({
           parent:{database_id:projDbId},
           properties:{
             [isFR?'Nom':'Name']:{title:[{text:{content:proj.name.trim()}}]},
-            'Contexte':{select:{name:ctxMap[proj.context]||ctxMap['']}},
+            'Contexte':{multi_select:ctxNames.map(n=>({name:n}))},
             'Statut':{select:{name:isFR?'En cours':'In progress'}},
             ...(proj.deadline?{Deadline:{date:{start:proj.deadline}}}:{})
           }
         }) });
+        if (pr.ok) projPageMap[proj.name.trim()] = pr.data.id;
+        // Tâches initiales liées à ce projet
+        for (const taskName of (proj.tasks||[]).filter(t=>t&&t.trim())) {
+          const projPageId = projPageMap[proj.name.trim()];
+          await nFetch(`${NOTION_API}/pages`, { method:'POST', headers:h(token), body: JSON.stringify({
+            parent:{database_id:tachesDbId},
+            properties:{
+              [isFR?'Titre':'Title']:{title:[{text:{content:taskName.trim()}}]},
+              'Statut':{select:{name:isFR?'À faire':'To do'}},
+              ...(projPageId?{[isFR?'Projet':'Project']:{relation:[{id:projPageId}]}}:{})
+            }
+          }) });
+        }
       }
 
       // 6 — Daily URL
       const dailyUrl = `${appUrl}/daily.html?n=${encodeURIComponent(user_name)}&ci=${ciDbId}&t=${tachesDbId}&p=${projDbId}&lang=${wl}`;
 
+      // 7 — Tableau de bord avec embed check-in + liens
+      const viewsNote = isFR
+        ? '💡 Pour les vues : dans "Tâches" → + Ajouter une vue → Calendrier (vue quotidienne/hebdomadaire). Dans "Projets" → + Ajouter une vue → Timeline (vue mensuelle/trimestrielle).'
+        : '💡 For views: in "Tasks" → + Add view → Calendar (daily/weekly). In "Projects" → + Add view → Timeline (monthly/quarterly).';
+      const dashR = await nFetch(`${NOTION_API}/pages`, { method:'POST', headers:h(token), body: JSON.stringify({
+        parent:{type:'page_id',page_id:pageId},
+        icon:{type:'emoji',emoji:'🏠'},
+        properties:{title:[{type:'text',text:{content:isFR?'Tableau de bord':'Dashboard'}}]},
+        children:[
+          {object:'block',type:'heading_2',heading_2:{rich_text:[{type:'text',text:{content:isFR?'🌅 Check-in quotidien':'🌅 Daily Check-in'}}]}},
+          {object:'block',type:'embed',embed:{url:dailyUrl}},
+          {object:'block',type:'divider',divider:{}},
+          {object:'block',type:'heading_2',heading_2:{rich_text:[{type:'text',text:{content:isFR?'🗂 Accès rapide':'🗂 Quick access'}}]}},
+          {object:'block',type:'bulleted_list_item',bulleted_list_item:{rich_text:[{type:'text',text:{content:(isFR?'📋 Tous les projets':'📋 All projects'),link:{url:`https://notion.so/${clean(projDbId)}`}}}]}},
+          {object:'block',type:'bulleted_list_item',bulleted_list_item:{rich_text:[{type:'text',text:{content:(isFR?'✅ Toutes les tâches':'✅ All tasks'),link:{url:`https://notion.so/${clean(tachesDbId)}`}}}]}},
+          {object:'block',type:'bulleted_list_item',bulleted_list_item:{rich_text:[{type:'text',text:{content:(isFR?'🌅 Historique check-ins':'🌅 Check-in history'),link:{url:`https://notion.so/${clean(ciDbId)}`}}}]}},
+          {object:'block',type:'divider',divider:{}},
+          {object:'block',type:'callout',callout:{icon:{type:'emoji',emoji:'💡'},rich_text:[{type:'text',text:{content:viewsNote.replace('💡 ','')}}]}}
+        ]
+      }) });
+      const dashId = dashR.ok ? dashR.data.id : null;
+
+      // 8 — Sous-pages Ressources par projet
+      for (const proj of (projects||[]).filter(proj=>proj.name?.trim()&&(proj.links||[]).some(l=>l&&l.url&&l.url.trim()))) {
+        const resourceBlocks = (proj.links||[]).filter(l=>l&&l.url&&l.url.trim()).map(l=>({
+          object:'block',type:'bookmark',
+          bookmark:{url:l.url.trim(),caption:l.label&&l.label.trim()?[{type:'text',text:{content:l.label.trim()}}]:[]}
+        }));
+        await nFetch(`${NOTION_API}/pages`, { method:'POST', headers:h(token), body: JSON.stringify({
+          parent:{type:'page_id',page_id:pageId},
+          icon:{type:'emoji',emoji:'📁'},
+          properties:{title:[{type:'text',text:{content:`${proj.name.trim()} — ${isFR?'Ressources':'Resources'}`}}]},
+          children:[
+            {object:'block',type:'heading_3',heading_3:{rich_text:[{type:'text',text:{content:isFR?'Liens et documents':'Links & documents'}}]}},
+            ...resourceBlocks
+          ]
+        }) });
+      }
+
       return res.status(200).json({
         success: true,
         workspace_url: `https://notion.so/${clean(pageId)}`,
+        dashboard_url: dashId ? `https://notion.so/${clean(dashId)}` : `https://notion.so/${clean(pageId)}`,
         projets_url: `https://notion.so/${clean(projDbId)}`,
         taches_url: `https://notion.so/${clean(tachesDbId)}`,
         checkins_url: `https://notion.so/${clean(ciDbId)}`,

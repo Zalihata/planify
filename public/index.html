@@ -9,194 +9,150 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink: #0F0F12;
-  --ink2: #3A3A4A;
-  --fog: #8A8A9A;
-  --border: #E4E4EE;
-  --bg: #F7F7FC;
-  --card: #FFFFFF;
-  --gold: #C8922A;
-  --gold-l: #FDF4E3;
-  --gold-m: #F5E0B0;
-  --green: #1A7F5A;
-  --green-l: #E8F7F1;
-  --red: #C02A2A;
-  --red-l: #FCEAEA;
-  --amber: #D97706;
-  --amber-l: #FEF3C7;
-  --r: 14px; --rs: 8px;
-  --sh: 0 2px 8px rgba(15,15,18,.06), 0 1px 2px rgba(15,15,18,.04);
-  --sh-md: 0 8px 24px rgba(15,15,18,.10), 0 2px 6px rgba(15,15,18,.06);
+  --ink:#0F0F12;--ink2:#3A3A4A;--fog:#8A8A9A;--border:#E4E4EE;--bg:#F7F7FC;--card:#FFFFFF;
+  --gold:#C8922A;--gold-l:#FDF4E3;--gold-m:#F5E0B0;
+  --green:#1A7F5A;--green-l:#E8F7F1;--red:#C02A2A;--amber:#D97706;
+  --r:14px;--rs:8px;
+  --sh:0 2px 8px rgba(15,15,18,.06),0 1px 2px rgba(15,15,18,.04);
 }
-*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', system-ui, sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
-.wrap { max-width: 560px; margin: 0 auto; padding: 20px 18px 100px; }
-
-/* ── PROGRESS ───────────────────────────────────────── */
-.topbar { display:flex; align-items:center; gap:12px; margin-bottom:28px; }
-.prog { flex:1; height:2px; background: var(--border); border-radius:1px; overflow:hidden; }
-.prog-fill { height:100%; background: var(--gold); border-radius:1px; transition: width .5s cubic-bezier(.4,0,.2,1); }
-.step-info { font-family: 'Syne', sans-serif; font-size:12px; font-weight:600; color:var(--fog); white-space:nowrap; }
-
-/* ── SCREENS ────────────────────────────────────────── */
-.scr { display:none; }
-.scr.on { display:block; animation: riseIn .28s cubic-bezier(.2,0,.2,1); }
-@keyframes riseIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
-
-/* ── TYPOGRAPHY ─────────────────────────────────────── */
-.display { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(26px,6vw,34px); line-height:1.15; letter-spacing:-.02em; }
-.h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:clamp(20px,5vw,24px); line-height:1.25; letter-spacing:-.015em; }
-.eyebrow { font-family:'Syne',sans-serif; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); margin-bottom:10px; }
-p.sub { font-size:14px; line-height:1.65; color:var(--fog); margin-top:8px; }
-
-/* ── WELCOME ────────────────────────────────────────── */
-.welcome-hero { padding: 36px 0 32px; }
-.logo-mark { width:56px; height:56px; background:var(--ink); border-radius:16px; display:flex; align-items:center; justify-content:center; margin-bottom:24px; position:relative; overflow:hidden; }
-.logo-mark::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,transparent 40%,rgba(200,146,42,.4)); }
-.logo-mark svg { width:28px; height:28px; fill:#fff; position:relative; z-index:1; }
-.feature-row { display:flex; gap:20px; margin:20px 0 28px; flex-wrap:wrap; }
-.feat { display:flex; align-items:center; gap:7px; font-size:13px; color:var(--fog); }
-.feat-dot { width:6px; height:6px; background:var(--gold); border-radius:50%; }
-.lang-row { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
-.lang-label { font-size:13px; color:var(--fog); }
-.lang-pill { display:flex; background:var(--border); border-radius:20px; padding:3px; gap:2px; }
-.lb { padding:5px 14px; border-radius:16px; border:none; background:transparent; font-size:13px; font-weight:500; cursor:pointer; color:var(--fog); font-family:inherit; transition:all .15s; }
-.lb.on { background:var(--card); color:var(--ink); box-shadow:var(--sh); }
-
-/* ── BUTTONS ────────────────────────────────────────── */
-.btn { width:100%; padding:15px; border:none; border-radius:var(--r); font-size:15px; font-weight:500; cursor:pointer; transition:all .15s; font-family:inherit; }
-.btn-gold { background:var(--gold); color:#fff; letter-spacing:-.01em; }
-.btn-gold:hover { filter:brightness(1.07); }
-.btn-outline { background:transparent; border:1.5px solid var(--border); color:var(--ink2); }
-.btn-ghost { background:transparent; color:var(--fog); font-size:13px; padding:10px; }
-.btn:active { transform:scale(.98); }
-.btn-row { display:flex; flex-direction:column; gap:8px; margin-top:24px; }
-.btn-sm { width:auto; padding:9px 18px; font-size:13px; }
-
-/* ── FORM ELEMENTS ──────────────────────────────────── */
-.field { margin-bottom:18px; }
-.field-label { font-size:13px; font-weight:500; color:var(--ink2); margin-bottom:7px; display:block; }
-input[type=text] { width:100%; background:var(--card); border:1.5px solid var(--border); border-radius:var(--rs); padding:13px 16px; color:var(--ink); font-size:15px; font-family:inherit; outline:none; transition:border-color .15s; }
-input[type=text]:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,146,42,.12); }
-input[type=text]::placeholder { color:var(--fog); }
-
-/* ── CHOICE CARDS ───────────────────────────────────── */
-.cc-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0; }
-.cc { background:var(--card); border:1.5px solid var(--border); border-radius:var(--rs); padding:13px; cursor:pointer; transition:all .15s; user-select:none; box-shadow:var(--sh); }
-.cc:hover { border-color:var(--gold-m); }
-.cc.on { border-color:var(--gold); background:var(--gold-l); box-shadow:0 0 0 3px rgba(200,146,42,.1); }
-.cc-icon { font-size:22px; display:block; margin-bottom:6px; }
-.cc-text { font-size:13px; font-weight:500; line-height:1.35; }
-.cc.on .cc-text { color:#7A4A0A; }
-.cc-full { grid-column:1/-1; display:flex; align-items:center; gap:10px; }
-.cc-full .cc-icon { margin-bottom:0; }
-
-/* ── RADIO CARDS ────────────────────────────────────── */
-.rc { background:var(--card); border:1.5px solid var(--border); border-radius:var(--rs); padding:14px 16px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; margin-bottom:8px; transition:all .15s; box-shadow:var(--sh); user-select:none; }
-.rc:hover { border-color:var(--gold-m); }
-.rc.on { border-color:var(--gold); background:var(--gold-l); }
-.rd { width:20px; height:20px; border:2px solid var(--border); border-radius:50%; flex-shrink:0; margin-top:1px; position:relative; transition:all .15s; }
-.rc.on .rd { border-color:var(--gold); background:var(--gold); }
-.rc.on .rd::after { content:''; position:absolute; inset:4px; background:#fff; border-radius:50%; }
-.rc-body { flex:1; }
-.rc-title { font-size:14px; font-weight:500; }
-.rc-sub { font-size:12px; color:var(--fog); margin-top:2px; }
-
-/* ── SCALE ──────────────────────────────────────────── */
-.scale-block { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:15px; margin-bottom:10px; box-shadow:var(--sh); }
-.sq { font-size:14px; font-weight:500; line-height:1.45; margin-bottom:11px; }
-.sb-row { display:flex; gap:5px; }
-.sb { flex:1; height:38px; border-radius:7px; border:1.5px solid var(--border); background:var(--card); font-size:13px; font-weight:600; color:var(--fog); cursor:pointer; font-family:inherit; transition:all .12s; }
-.sb:hover { border-color:var(--gold-m); }
-.sb.on { border-color:var(--gold); background:var(--gold); color:#fff; }
-.sb-legend { display:flex; justify-content:space-between; font-size:10px; color:#ADADBF; margin-top:4px; }
-
-/* ── ENGAGEMENTS ────────────────────────────────────── */
-.eng { background:var(--card); border:1.5px solid var(--border); border-radius:var(--r); overflow:hidden; margin-bottom:10px; box-shadow:var(--sh); }
-.eng-top { display:flex; align-items:center; gap:10px; padding:13px 15px; cursor:pointer; }
-.eng-badge { width:26px; height:26px; background:var(--ink); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:11px; font-weight:700; flex-shrink:0; }
-.eng-title { flex:1; font-size:14px; font-weight:500; color:var(--ink); }
-.eng-title.empty { color:var(--fog); }
-.eng-score { font-family:'Syne',sans-serif; font-size:11px; font-weight:700; background:var(--gold-l); color:var(--gold); padding:3px 9px; border-radius:10px; border:1px solid var(--gold-m); }
-.eng-body { border-top:1px solid var(--border); padding:14px 15px; display:none; }
-.eng-body.open { display:block; }
-.eq { margin-bottom:11px; }
-.eq label { font-size:11px; font-weight:600; color:var(--fog); text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:6px; }
-.eq-btns { display:flex; gap:5px; }
-.eq-btn { flex:1; padding:7px 4px; border:1.5px solid var(--border); border-radius:6px; background:var(--card); font-size:12px; font-weight:500; color:var(--fog); cursor:pointer; font-family:inherit; text-align:center; transition:all .12s; line-height:1.3; }
-.eq-btn:hover { border-color:var(--gold-m); }
-.eq-btn.on { border-color:var(--gold); background:var(--gold-l); color:#7A4A0A; }
-.eng-remove { font-size:11px; color:var(--fog); background:none; border:none; cursor:pointer; padding:0; margin-top:10px; font-family:inherit; text-decoration:underline; }
-
-.add-eng { width:100%; padding:12px; border:1.5px dashed var(--border); border-radius:var(--r); background:transparent; color:var(--fog); font-size:13px; cursor:pointer; font-family:inherit; transition:all .15s; margin-top:2px; }
-.add-eng:hover { border-color:var(--gold); color:var(--gold); background:var(--gold-l); }
-
-/* ── SECTION HEADER ─────────────────────────────────── */
-.sec-head { margin-bottom:8px; font-size:14px; font-weight:500; color:var(--ink2); }
-.sec-note { font-size:12px; color:var(--fog); display:inline; }
-
-/* ── GENERATING ─────────────────────────────────────── */
-.gen-wrap { display:flex; flex-direction:column; align-items:center; padding:72px 0; gap:18px; text-align:center; }
-.spin { width:36px; height:36px; border:2.5px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin .7s linear infinite; }
-@keyframes spin { to{transform:rotate(360deg)} }
-.gen-list { display:flex; flex-direction:column; gap:8px; width:100%; max-width:260px; }
-.gs { font-size:13px; color:#ADADBF; transition:color .3s; text-align:left; }
-.gs.active { color:var(--ink); font-weight:500; }
-.gs.done { color:var(--green); }
-.gs.done::before { content:'✓  '; }
-
-/* ── RESULT ─────────────────────────────────────────── */
-.result-hero { text-align:center; padding:40px 0 28px; position:relative; }
-.result-bg { position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%, rgba(200,146,42,.08) 0%, transparent 70%); border-radius:var(--r); pointer-events:none; }
-.result-emoji { font-size:60px; display:block; margin-bottom:14px; }
-.result-type { font-family:'Syne',sans-serif; font-size:clamp(22px,5vw,28px); font-weight:800; letter-spacing:-.02em; }
-.result-tagline { font-size:14px; color:var(--fog); margin-top:8px; max-width:340px; margin-left:auto; margin-right:auto; line-height:1.5; }
-
-.rcard { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:18px; margin-bottom:12px; box-shadow:var(--sh); }
-.rcard-label { font-family:'Syne',sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--fog); margin-bottom:14px; }
-
-.mat-row { margin-bottom:9px; }
-.mat-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; font-size:13px; }
-.mat-dim { font-weight:400; color:var(--ink2); }
-.mat-val { font-family:'Syne',sans-serif; font-weight:700; font-size:13px; }
-.mat-bg { height:5px; background:var(--border); border-radius:3px; overflow:hidden; }
-.mat-fill { height:100%; border-radius:3px; transition:width 1s cubic-bezier(.2,0,.2,1); }
-
-.pr-row { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
-.pr-row:last-child { border-bottom:none; }
-.pr-num { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-size:12px; font-weight:800; color:#fff; flex-shrink:0; }
-.pr-1 { background:#C02A2A; }
-.pr-2 { background:#D97706; }
-.pr-3 { background:var(--green); }
-.pr-body h4 { font-size:14px; font-weight:500; }
-.pr-body p { font-size:12px; color:var(--fog); margin-top:3px; line-height:1.5; }
-
-.rlist { list-style:none; display:flex; flex-direction:column; gap:9px; }
-.rlist li { font-size:13px; line-height:1.6; padding-left:18px; position:relative; color:var(--ink2); }
-.rlist li::before { content:'→'; position:absolute; left:0; color:var(--gold); font-weight:700; }
-
-.msg-card { background:linear-gradient(135deg,var(--gold-l) 0%,#FFF8F0 100%); border:1px solid var(--gold-m); border-radius:var(--r); padding:22px; font-size:15px; line-height:1.7; font-weight:400; color:#5A3A0A; font-style:italic; }
-
-.cta-block { background:var(--ink); border-radius:var(--r); padding:28px; text-align:center; margin-top:8px; position:relative; overflow:hidden; }
-.cta-block::before { content:''; position:absolute; inset:-1px; background:linear-gradient(135deg,rgba(200,146,42,.3),transparent 60%); border-radius:var(--r); pointer-events:none; }
-.cta-block h3 { font-family:'Syne',sans-serif; color:#fff; font-size:20px; font-weight:800; margin-bottom:8px; position:relative; }
-.cta-block p { color:rgba(255,255,255,.65); font-size:13px; margin-bottom:20px; line-height:1.6; position:relative; }
-.cta-btns { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; position:relative; }
-.btn-light { background:rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.2); border-radius:var(--rs); padding:10px 20px; font-size:13px; font-weight:500; cursor:pointer; font-family:inherit; transition:all .15s; }
-.btn-light:hover { background:rgba(255,255,255,.2); }
-.btn-gold-sm { background:var(--gold); color:#fff; border:none; border-radius:var(--rs); padding:10px 20px; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:all .15s; }
-
-.divider { height:1px; background:var(--border); margin:20px 0; }
-
-@media (max-width:400px) { .cc-grid { grid-template-columns:1fr; } }
-@media print {
-  .topbar,.btn,.btn-row,.cta-block,.add-eng { display:none!important; }
-  body { background:#fff; }
-  .scr { display:none; }
-  #s-result { display:block!important; }
-  .wrap { padding:0; max-width:100%; }
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:20px 18px 100px}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.prog{flex:1;height:2px;background:var(--border);border-radius:1px;overflow:hidden}
+.prog-fill{height:100%;background:var(--gold);border-radius:1px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.step-info{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--fog);white-space:nowrap}
+.scr{display:none}
+.scr.on{display:block;animation:riseIn .28s cubic-bezier(.2,0,.2,1)}
+@keyframes riseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.display{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(26px,6vw,34px);line-height:1.15;letter-spacing:-.02em}
+.h2{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(20px,5vw,24px);line-height:1.25;letter-spacing:-.015em}
+.eyebrow{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:10px}
+p.sub{font-size:14px;line-height:1.65;color:var(--fog);margin-top:8px}
+.welcome-hero{padding:36px 0 32px}
+.logo-mark{width:56px;height:56px;background:var(--ink);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;position:relative;overflow:hidden}
+.logo-mark::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(200,146,42,.4))}
+.logo-mark svg{width:28px;height:28px;fill:#fff;position:relative;z-index:1}
+.feature-row{display:flex;gap:20px;margin:20px 0 28px;flex-wrap:wrap}
+.feat{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--fog)}
+.feat-dot{width:6px;height:6px;background:var(--gold);border-radius:50%}
+.lang-row{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.lang-label{font-size:13px;color:var(--fog)}
+.lang-pill{display:flex;background:var(--border);border-radius:20px;padding:3px;gap:2px}
+.lb{padding:5px 14px;border-radius:16px;border:none;background:transparent;font-size:13px;font-weight:500;cursor:pointer;color:var(--fog);font-family:inherit;transition:all .15s}
+.lb.on{background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+.btn{width:100%;padding:15px;border:none;border-radius:var(--r);font-size:15px;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-gold{background:var(--gold);color:#fff;letter-spacing:-.01em}
+.btn-gold:hover{filter:brightness(1.07)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--ink2)}
+.btn-ghost{background:transparent;color:var(--fog);font-size:13px;padding:10px}
+.btn:active{transform:scale(.98)}
+.btn-row{display:flex;flex-direction:column;gap:8px;margin-top:24px}
+.field{margin-bottom:18px}
+.field-label{font-size:13px;font-weight:500;color:var(--ink2);margin-bottom:7px;display:block}
+input[type=text]{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:13px 16px;color:var(--ink);font-size:15px;font-family:inherit;outline:none;transition:border-color .15s}
+input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,146,42,.12)}
+input[type=text]::placeholder{color:var(--fog)}
+.cc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.cc{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:13px;cursor:pointer;transition:all .15s;user-select:none;box-shadow:var(--sh)}
+.cc:hover{border-color:var(--gold-m)}
+.cc.on{border-color:var(--gold);background:var(--gold-l);box-shadow:0 0 0 3px rgba(200,146,42,.1)}
+.cc-icon{font-size:22px;display:block;margin-bottom:6px}
+.cc-text{font-size:13px;font-weight:500;line-height:1.35}
+.cc.on .cc-text{color:#7A4A0A}
+.cc-full{grid-column:1/-1;display:flex;align-items:center;gap:10px}
+.cc-full .cc-icon{margin-bottom:0}
+.rc{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;margin-bottom:8px;transition:all .15s;box-shadow:var(--sh);user-select:none}
+.rc:hover{border-color:var(--gold-m)}
+.rc.on{border-color:var(--gold);background:var(--gold-l)}
+.rd{width:20px;height:20px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;margin-top:1px;position:relative;transition:all .15s}
+.rc.on .rd{border-color:var(--gold);background:var(--gold)}
+.rc.on .rd::after{content:'';position:absolute;inset:4px;background:#fff;border-radius:50%}
+.rc-body{flex:1}
+.rc-title{font-size:14px;font-weight:500}
+.rc-sub{font-size:12px;color:var(--fog);margin-top:2px}
+.scale-block{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:10px;box-shadow:var(--sh)}
+.sq{font-size:14px;font-weight:500;line-height:1.45;margin-bottom:11px}
+.sb-row{display:flex;gap:5px}
+.sb{flex:1;height:38px;border-radius:7px;border:1.5px solid var(--border);background:var(--card);font-size:13px;font-weight:600;color:var(--fog);cursor:pointer;font-family:inherit;transition:all .12s}
+.sb:hover{border-color:var(--gold-m)}
+.sb.on{border-color:var(--gold);background:var(--gold);color:#fff}
+.sb-legend{display:flex;justify-content:space-between;font-size:10px;color:#ADADBF;margin-top:4px}
+.eng{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh)}
+.eng-top{display:flex;align-items:center;gap:10px;padding:13px 15px;cursor:pointer}
+.eng-badge{width:26px;height:26px;background:var(--ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;flex-shrink:0}
+.eng-title{flex:1;font-size:14px;font-weight:500;color:var(--ink)}
+.eng-title.empty{color:var(--fog)}
+.eng-score{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;background:var(--gold-l);color:var(--gold);padding:3px 9px;border-radius:10px;border:1px solid var(--gold-m)}
+.eng-body{border-top:1px solid var(--border);padding:14px 15px;display:none}
+.eng-body.open{display:block}
+.eq{margin-bottom:11px}
+.eq label{font-size:11px;font-weight:600;color:var(--fog);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px}
+.eq-btns{display:flex;gap:5px}
+.eq-btn{flex:1;padding:7px 4px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);font-size:12px;font-weight:500;color:var(--fog);cursor:pointer;font-family:inherit;text-align:center;transition:all .12s;line-height:1.3}
+.eq-btn:hover{border-color:var(--gold-m)}
+.eq-btn.on{border-color:var(--gold);background:var(--gold-l);color:#7A4A0A}
+.eng-remove{font-size:11px;color:var(--fog);background:none;border:none;cursor:pointer;padding:0;margin-top:10px;font-family:inherit;text-decoration:underline}
+.add-eng{width:100%;padding:12px;border:1.5px dashed var(--border);border-radius:var(--r);background:transparent;color:var(--fog);font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s;margin-top:2px}
+.add-eng:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-l)}
+.sec-head{margin-bottom:8px;font-size:14px;font-weight:500;color:var(--ink2)}
+.sec-note{font-size:12px;color:var(--fog);display:inline}
+.divider{height:1px;background:var(--border);margin:20px 0}
+/* Context screen style questions */
+.style-q{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:10px;box-shadow:var(--sh)}
+.style-q .sq{font-size:14px;font-weight:500;margin-bottom:10px;line-height:1.4}
+/* Choices screen */
+.choice-item{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;margin-bottom:8px;transition:all .15s;user-select:none}
+.choice-item.on{border-color:var(--gold);background:var(--gold-l)}
+.choice-chk{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s}
+.choice-item.on .choice-chk{background:var(--gold);border-color:var(--gold);color:#fff}
+.choice-body{flex:1}
+.choice-title{font-size:14px;font-weight:500}
+.choice-sub{font-size:12px;color:var(--fog);margin-top:2px}
+/* Generating */
+.gen-wrap{display:flex;flex-direction:column;align-items:center;padding:72px 0;gap:18px;text-align:center}
+.spin{width:36px;height:36px;border:2.5px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gen-list{display:flex;flex-direction:column;gap:8px;width:100%;max-width:260px}
+.gs{font-size:13px;color:#ADADBF;transition:color .3s;text-align:left}
+.gs.active{color:var(--ink);font-weight:500}
+.gs.done{color:var(--green)}
+.gs.done::before{content:'✓  '}
+/* Result */
+.result-hero{text-align:center;padding:40px 0 28px;position:relative}
+.result-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(200,146,42,.08) 0%,transparent 70%);border-radius:var(--r);pointer-events:none}
+.result-emoji{font-size:60px;display:block;margin-bottom:14px}
+.result-type{font-family:'Syne',sans-serif;font-size:clamp(22px,5vw,28px);font-weight:800;letter-spacing:-.02em}
+.result-tagline{font-size:14px;color:var(--fog);margin-top:8px;max-width:340px;margin-left:auto;margin-right:auto;line-height:1.5}
+.rcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:12px;box-shadow:var(--sh)}
+.rcard-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--fog);margin-bottom:14px}
+.mat-row{margin-bottom:9px}
+.mat-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-size:13px}
+.mat-dim{font-weight:400;color:var(--ink2)}
+.mat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:13px}
+.mat-bg{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.mat-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.2,0,.2,1)}
+.pr-row{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.pr-row:last-child{border-bottom:none}
+.pr-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.pr-1{background:#C02A2A}.pr-2{background:#D97706}.pr-3{background:var(--green)}
+.pr-body h4{font-size:14px;font-weight:500}
+.pr-body p{font-size:12px;color:var(--fog);margin-top:3px;line-height:1.5}
+.rlist{list-style:none;display:flex;flex-direction:column;gap:9px}
+.rlist li{font-size:13px;line-height:1.6;padding-left:18px;position:relative;color:var(--ink2)}
+.rlist li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.msg-card{background:linear-gradient(135deg,var(--gold-l) 0%,#FFF8F0 100%);border:1px solid var(--gold-m);border-radius:var(--r);padding:22px;font-size:15px;line-height:1.7;font-weight:400;color:#5A3A0A;font-style:italic}
+.cta-block{background:var(--ink);border-radius:var(--r);padding:28px;text-align:center;margin-top:8px;position:relative;overflow:hidden}
+.cta-block::before{content:'';position:absolute;inset:-1px;background:linear-gradient(135deg,rgba(200,146,42,.3),transparent 60%);border-radius:var(--r);pointer-events:none}
+.cta-block h3{font-family:'Syne',sans-serif;color:#fff;font-size:20px;font-weight:800;margin-bottom:8px;position:relative}
+.cta-block p{color:rgba(255,255,255,.65);font-size:13px;margin-bottom:20px;line-height:1.6;position:relative}
+.cta-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative}
+.btn-light{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:var(--rs);padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-light:hover{background:rgba(255,255,255,.2)}
+.btn-gold-sm{background:var(--gold);color:#fff;border:none;border-radius:var(--rs);padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+@media(max-width:400px){.cc-grid{grid-template-columns:1fr}}
+@media print{.topbar,.btn,.btn-row,.cta-block,.add-eng{display:none!important}body{background:#fff}.scr{display:none}#s-result{display:block!important}.wrap{padding:0;max-width:100%}}
 </style>
 </head>
 <body>
@@ -206,12 +162,10 @@ input[type=text]::placeholder { color:var(--fog); }
     <div class="step-info" id="step-info"></div>
   </div>
 
-  <!-- ① WELCOME -->
+  <!-- WELCOME -->
   <div class="scr on" id="s-welcome">
     <div class="welcome-hero">
-      <div class="logo-mark">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-      </div>
+      <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
       <div class="lang-row">
         <span class="lang-label" id="ll">Langue :</span>
         <div class="lang-pill">
@@ -219,27 +173,27 @@ input[type=text]::placeholder { color:var(--fog); }
           <button class="lb" onclick="setLang('en')">🇬🇧 EN</button>
         </div>
       </div>
-      <div class="eyebrow" id="w-tag">Diagnostic · 10 min · Gratuit</div>
-      <h1 class="display" id="w-h1">Trouve ton profil de planificateur·rice</h1>
-      <p class="sub" id="w-p">Un diagnostic en 6 étapes pour comprendre comment tu organises ta vie et tes projets — et recevoir des recommandations sur mesure.</p>
+      <div class="eyebrow" data-key="w-tag">Diagnostic · 10 min · Gratuit</div>
+      <h1 class="display" data-key="w-h1">Trouve ton profil de planificateur·rice</h1>
+      <p class="sub" data-key="w-p">Un diagnostic en 7 étapes pour comprendre comment tu organises ta vie et tes projets — et recevoir des recommandations sur mesure.</p>
       <div class="feature-row">
         <div class="feat"><div class="feat-dot"></div><span data-key="f1">Profil personnalisé</span></div>
         <div class="feat"><div class="feat-dot"></div><span data-key="f2">Priorités clarifiées</span></div>
-        <div class="feat"><div class="feat-dot"></div><span data-key="f3">Plan d'action concret</span></div>
+        <div class="feat"><div class="feat-dot"></div><span data-key="f3">Plan d'action sur mesure</span></div>
       </div>
-      <button class="btn btn-gold" onclick="go('s-profile')" id="w-cta">Commencer →</button>
+      <button class="btn btn-gold" onclick="go('s-profile')" data-key="w-cta">Commencer →</button>
     </div>
   </div>
 
-  <!-- ② PROFILE -->
+  <!-- 1 PROFILE -->
   <div class="scr" id="s-profile">
-    <div class="eyebrow" data-key="s1-ey">Étape 1 / 6 — Profil</div>
+    <div class="eyebrow" data-key="s1-ey">Étape 1 / 7 — Profil</div>
     <h2 class="h2" data-key="s1-h">Faisons connaissance</h2>
     <p class="sub" data-key="s1-p">Tes réponses permettent de personnaliser ton diagnostic.</p>
     <div class="divider"></div>
     <div class="field">
       <label class="field-label" data-key="name-l">Comment tu t'appelles ?</label>
-      <input type="text" id="inp-name" data-key-ph="name-ph" placeholder="Ton prénom...">
+      <input type="text" id="inp-name" data-key-ph="name-ph" placeholder="Ton prénom…">
     </div>
     <div class="sec-head" data-key="ctx-l">Dans quels domaines travailles-tu principalement ? <span class="sec-note" data-key="multi">(plusieurs choix)</span></div>
     <div class="cc-grid" id="ctx-grid">
@@ -256,9 +210,9 @@ input[type=text]::placeholder { color:var(--fog); }
     </div>
   </div>
 
-  <!-- ③ SITUATION -->
+  <!-- 2 SITUATION -->
   <div class="scr" id="s-situation">
-    <div class="eyebrow" data-key="s2-ey">Étape 2 / 6 — Situation</div>
+    <div class="eyebrow" data-key="s2-ey">Étape 2 / 7 — Situation</div>
     <h2 class="h2" data-key="s2-h">Ta situation actuelle</h2>
     <div class="divider"></div>
     <div class="sec-head" data-key="nb-q">Combien d'engagements actifs gères-tu ?</div>
@@ -288,9 +242,9 @@ input[type=text]::placeholder { color:var(--fog); }
     </div>
   </div>
 
-  <!-- ④ MATURITY -->
+  <!-- 3 MATURITY -->
   <div class="scr" id="s-maturity">
-    <div class="eyebrow" data-key="s3-ey">Étape 3 / 6 — Auto-évaluation</div>
+    <div class="eyebrow" data-key="s3-ey">Étape 3 / 7 — Auto-évaluation</div>
     <h2 class="h2" data-key="s3-h">Comment tu te perçois</h2>
     <p class="sub" data-key="s3-p">1 = pas du tout · 5 = tout à fait. Sois honnête, c'est pour toi.</p>
     <div class="divider"></div>
@@ -301,9 +255,9 @@ input[type=text]::placeholder { color:var(--fog); }
     </div>
   </div>
 
-  <!-- ⑤ ENGAGEMENTS -->
+  <!-- 4 ENGAGEMENTS -->
   <div class="scr" id="s-engagements">
-    <div class="eyebrow" data-key="s4-ey">Étape 4 / 6 — Engagements</div>
+    <div class="eyebrow" data-key="s4-ey">Étape 4 / 7 — Engagements</div>
     <h2 class="h2" data-key="s4-h">Tes engagements principaux</h2>
     <p class="sub" data-key="s4-p">Liste 3 à 5 projets ou responsabilités importants. Pour chacun, 3 questions rapides pour calculer ta priorité réelle.</p>
     <div class="divider"></div>
@@ -315,9 +269,9 @@ input[type=text]::placeholder { color:var(--fog); }
     </div>
   </div>
 
-  <!-- ⑥ PREFERENCES -->
+  <!-- 5 PREFERENCES -->
   <div class="scr" id="s-preferences">
-    <div class="eyebrow" data-key="s5-ey">Étape 5 / 6 — Préférences</div>
+    <div class="eyebrow" data-key="s5-ey">Étape 5 / 7 — Préférences</div>
     <h2 class="h2" data-key="s5-h">Comment tu veux travailler</h2>
     <div class="divider"></div>
     <div class="sec-head" data-key="freq-q">À quelle fréquence veux-tu faire le point sur tes projets ?</div>
@@ -336,12 +290,75 @@ input[type=text]::placeholder { color:var(--fog); }
       <div class="cc cc-full" data-v="none" onclick="tgl(this)"><span class="cc-icon">🤷</span><span class="cc-text" data-key="tl5">Pas d'outil particulier</span></div>
     </div>
     <div class="btn-row">
-      <button class="btn btn-gold" onclick="valPref()" data-key="s5-next">Voir mon profil →</button>
+      <button class="btn btn-gold" onclick="valPref()" data-key="next">Continuer →</button>
       <button class="btn btn-ghost" onclick="go('s-engagements')" data-key="back">← Retour</button>
     </div>
   </div>
 
-  <!-- ⑦ GENERATING -->
+  <!-- 6 CONTEXT -->
+  <div class="scr" id="s-context">
+    <div class="eyebrow" data-key="s6-ey">Étape 6 / 7 — Contexte de vie</div>
+    <h2 class="h2" data-key="s6-h">Ton contexte et ton style de travail</h2>
+    <p class="sub" data-key="s6-p">Ces informations permettent d'affiner les données de ton profil.</p>
+    <div class="divider"></div>
+
+    <div class="sec-head" data-key="resp-q">As-tu des personnes ou des êtres dont tu prends soin régulièrement ? <span class="sec-note" data-key="multi">(plusieurs)</span></div>
+    <div class="cc-grid" id="resp-grid">
+      <div class="cc" data-v="children" onclick="tgl(this)"><span class="cc-icon">👶</span><span class="cc-text" data-key="rsp0">Enfants</span></div>
+      <div class="cc" data-v="adults" onclick="tgl(this)"><span class="cc-icon">🧓</span><span class="cc-text" data-key="rsp1">Adultes dépendants</span></div>
+      <div class="cc" data-v="animals" onclick="tgl(this)"><span class="cc-icon">🐾</span><span class="cc-text" data-key="rsp2">Animaux</span></div>
+      <div class="cc cc-full" data-v="none-resp" onclick="tgl(this)"><span class="cc-icon">—</span><span class="cc-text" data-key="rsp3">Personne en particulier</span></div>
+    </div>
+
+    <div class="sec-head" style="margin-top:16px;" data-key="resp-imp-q">Ces responsabilités impactent ton planning…</div>
+    <div id="resp-impact">
+      <div class="rc" data-v="high" onclick="selR('resp-impact',this)"><div class="rd"></div><div class="rc-body"><div class="rc-title" data-key="ri0t">Beaucoup</div><div class="rc-sub" data-key="ri0s">Cela structure ou contrainte fortement mes disponibilités</div></div></div>
+      <div class="rc" data-v="mid" onclick="selR('resp-impact',this)"><div class="rd"></div><div class="rc-body"><div class="rc-title" data-key="ri1t">Parfois</div><div class="rc-sub" data-key="ri1s">Selon les périodes</div></div></div>
+      <div class="rc" data-v="low" onclick="selR('resp-impact',this)"><div class="rd"></div><div class="rc-body"><div class="rc-title" data-key="ri2t">Peu ou pas</div><div class="rc-sub" data-key="ri2s">Je gère ça indépendamment de mon planning</div></div></div>
+    </div>
+
+    <div class="sec-head" style="margin-top:16px;" data-key="style-head">Comment tu fonctionnes généralement</div>
+    <div id="style-qs"></div>
+
+    <div class="sec-head" style="margin-top:16px;" data-key="res-q">Ce qui te ressource <span class="sec-note" data-key="multi">(plusieurs)</span></div>
+    <div class="cc-grid" id="res-grid">
+      <div class="cc" data-v="nature" onclick="tgl(this)"><span class="cc-icon">🌿</span><span class="cc-text" data-key="res0">Nature / plein air</span></div>
+      <div class="cc" data-v="reading" onclick="tgl(this)"><span class="cc-icon">📖</span><span class="cc-text" data-key="res1">Lecture</span></div>
+      <div class="cc" data-v="art" onclick="tgl(this)"><span class="cc-icon">🎨</span><span class="cc-text" data-key="res2">Musique / art</span></div>
+      <div class="cc" data-v="sport" onclick="tgl(this)"><span class="cc-icon">🏃</span><span class="cc-text" data-key="res3">Sport / mouvement</span></div>
+      <div class="cc" data-v="create" onclick="tgl(this)"><span class="cc-icon">✍️</span><span class="cc-text" data-key="res4">Création</span></div>
+      <div class="cc" data-v="social" onclick="tgl(this)"><span class="cc-icon">💬</span><span class="cc-text" data-key="res5">Échanges / convivialité</span></div>
+      <div class="cc" data-v="alone" onclick="tgl(this)"><span class="cc-icon">🧘</span><span class="cc-text" data-key="res6">Temps seul·e</span></div>
+      <div class="cc" data-v="play" onclick="tgl(this)"><span class="cc-icon">🎮</span><span class="cc-text" data-key="res7">Jeu / détente</span></div>
+    </div>
+
+    <div class="sec-head" style="margin-top:16px;" data-key="res-freq-q">Tu y as accès…</div>
+    <div id="res-freq">
+      <div class="rc" data-v="often" onclick="selR('res-freq',this)"><div class="rd"></div><div class="rc-body"><div class="rc-title" data-key="rf0t">Souvent</div><div class="rc-sub" data-key="rf0s">Plusieurs fois par semaine</div></div></div>
+      <div class="rc" data-v="sometimes" onclick="selR('res-freq',this)"><div class="rd"></div><div class="rc-body"><div class="rc-title" data-key="rf1t">De temps en temps</div><div class="rc-sub" data-key="rf1s">Une à deux fois par semaine</div></div></div>
+      <div class="rc" data-v="rarely" onclick="selR('res-freq',this)"><div class="rd"></div><div class="rc-body"><div class="rc-title" data-key="rf2t">Rarement</div><div class="rc-sub" data-key="rf2s">Moins d'une fois par semaine</div></div></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="valContext()" data-key="next">Continuer →</button>
+      <button class="btn btn-ghost" onclick="go('s-preferences')" data-key="back">← Retour</button>
+    </div>
+  </div>
+
+  <!-- 7 CHOICES -->
+  <div class="scr" id="s-choices">
+    <div class="eyebrow" data-key="s7-ey">Étape 7 / 7 — Choix</div>
+    <h2 class="h2" data-key="s7-h">Ce que tu veux recevoir</h2>
+    <p class="sub" data-key="s7-p">Sélectionne les éléments à inclure dans ton profil. Tout est coché par défaut.</p>
+    <div class="divider"></div>
+    <div id="choices-list"></div>
+    <div class="btn-row">
+      <button class="btn btn-gold" onclick="valChoices()" data-key="s7-next">Générer mon profil →</button>
+      <button class="btn btn-ghost" onclick="go('s-context')" data-key="back">← Retour</button>
+    </div>
+  </div>
+
+  <!-- GENERATING -->
   <div class="scr" id="s-generating">
     <div class="gen-wrap">
       <div class="spin"></div>
@@ -351,12 +368,12 @@ input[type=text]::placeholder { color:var(--fog); }
         <div class="gs" id="gs1" data-key="gs1">Analyse de ta maturité</div>
         <div class="gs" id="gs2" data-key="gs2">Calcul des priorités</div>
         <div class="gs" id="gs3" data-key="gs3">Construction du profil</div>
-        <div class="gs" id="gs4" data-key="gs4">Rédaction des recommandations</div>
+        <div class="gs" id="gs4" data-key="gs4">Rédaction des éléments demandés</div>
       </div>
     </div>
   </div>
 
-  <!-- ⑧ RESULT -->
+  <!-- RESULT -->
   <div class="scr" id="s-result">
     <div class="result-hero">
       <div class="result-bg"></div>
@@ -368,23 +385,23 @@ input[type=text]::placeholder { color:var(--fog); }
       <div class="rcard-label" data-key="rt-mat">Maturité de planification</div>
       <div id="r-mat-bars"></div>
     </div>
-    <div class="rcard">
+    <div class="rcard" id="card-priorities">
       <div class="rcard-label" data-key="rt-pri">Tes priorités (classées par score)</div>
       <div id="r-priorities"></div>
     </div>
-    <div class="rcard">
+    <div class="rcard" id="card-forces">
       <div class="rcard-label" data-key="rt-forces">Ce qui fonctionne bien chez toi</div>
       <ul class="rlist" id="r-forces"></ul>
     </div>
-    <div class="rcard">
+    <div class="rcard" id="card-axes">
       <div class="rcard-label" data-key="rt-axes">Axes de développement</div>
       <ul class="rlist" id="r-axes"></ul>
     </div>
-    <div class="rcard">
-      <div class="rcard-label" data-key="rt-reco">Recommandations concrètes</div>
+    <div class="rcard" id="card-recos">
+      <div class="rcard-label" data-key="rt-reco">Recommandations pratiques</div>
       <ul class="rlist" id="r-recos"></ul>
     </div>
-    <div class="msg-card" id="r-msg"></div>
+    <div class="msg-card" id="r-msg" style="display:none;"></div>
     <div class="cta-block">
       <h3 data-key="cta-h">Prêt·e à passer à l'action ?</h3>
       <p data-key="cta-p">Découvre comment mettre en place un système de planification complet, adapté à ton profil et à tes outils.</p>
@@ -396,126 +413,182 @@ input[type=text]::placeholder { color:var(--fog); }
     </div>
   </div>
 </div>
-
 <script>
-// ─── CONFIG ──────────────────────────────────────────────────────────────────
-// Remplace par l'URL de ton proxy Vercel
 const CLAUDE_PROXY = '/api/proxy';
 
-// ─── COPY ────────────────────────────────────────────────────────────────────
 const T = {
   fr: {
-    ll:'Langue :', 'w-tag':'Diagnostic · 10 min · Gratuit',
+    'll':'Langue :','w-tag':'Diagnostic · 10 min · Gratuit',
     'w-h1':'Trouve ton profil de planificateur·rice',
-    'w-p':"Un diagnostic en 6 étapes pour comprendre comment tu organises ta vie et tes projets — et recevoir des recommandations sur mesure.",
-    'w-cta':'Commencer →', f1:'Profil personnalisé', f2:'Priorités clarifiées', f3:'Plan d\'action concret',
-    's1-ey':'Étape 1 / 6 — Profil', 's1-h':'Faisons connaissance', 's1-p':'Tes réponses permettent de personnaliser ton diagnostic.',
-    'name-l':'Comment tu t\'appelles ?', 'name-ph':'Ton prénom…',
-    'ctx-l':'Dans quels domaines travailles-tu principalement ?', multi:'(plusieurs choix)',
-    ctx0:'Projets professionnels', ctx1:'Famille & parentalité', ctx2:'Associatif / bénévolat',
-    ctx3:'Entrepreneuriat', ctx4:'Formation / montée en compétences', ctx5:'Autre projet personnel',
-    's2-ey':'Étape 2 / 6 — Situation', 's2-h':'Ta situation actuelle',
+    'w-p':'Un diagnostic en 7 étapes pour comprendre comment tu organises ta vie et tes projets — et recevoir des recommandations sur mesure.',
+    'w-cta':'Commencer →','f1':'Profil personnalisé','f2':'Priorités clarifiées','f3':'Plan d\'action sur mesure',
+    's1-ey':'Étape 1 / 7 — Profil','s1-h':'Faisons connaissance','s1-p':'Tes réponses permettent de personnaliser ton diagnostic.',
+    'name-l':'Comment tu t\'appelles ?','name-ph':'Ton prénom…',
+    'ctx-l':'Dans quels domaines travailles-tu principalement ?','multi':'(plusieurs choix)',
+    'ctx0':'Projets professionnels','ctx1':'Famille & parentalité','ctx2':'Associatif / bénévolat',
+    'ctx3':'Entrepreneuriat','ctx4':'Formation / montée en compétences','ctx5':'Autre projet personnel',
+    's2-ey':'Étape 2 / 7 — Situation','s2-h':'Ta situation actuelle',
     'nb-q':'Combien d\'engagements actifs gères-tu ?',
-    nb0t:'1 à 3', nb0s:'Quelques projets bien définis',
-    nb1t:'4 à 7', nb1s:'Plusieurs fronts à gérer',
-    nb2t:'8 ou plus', nb2s:'Beaucoup d\'engagements simultanés',
-    'mode-q':'Tu travailles principalement…', m0:'Seul·e', m1:'En duo ou en famille', m2:'Avec une petite équipe',
+    'nb0t':'1 à 3','nb0s':'Quelques projets bien définis',
+    'nb1t':'4 à 7','nb1s':'Plusieurs fronts à gérer',
+    'nb2t':'8 ou plus','nb2s':'Beaucoup d\'engagements simultanés',
+    'mode-q':'Tu travailles principalement…','m0':'Seul·e','m1':'En duo ou en famille','m2':'Avec une petite équipe',
     'ch-q':'Ton plus grand défi en ce moment ?',
-    ch0:'Je ne sais pas par quoi commencer', ch1:'Je me sens débordé·e',
-    ch2:'Du mal à rester régulier·ère', ch3:'Mes projets n\'avancent pas assez',
-    ch4:'Manque de vision claire', ch5:'Difficile de s\'organiser avec les autres',
-    's3-ey':'Étape 3 / 6 — Auto-évaluation', 's3-h':'Comment tu te perçois',
+    'ch0':'Je ne sais pas par quoi commencer','ch1':'Je me sens débordé·e',
+    'ch2':'Du mal à rester régulier·ère','ch3':'Mes projets n\'avancent pas assez',
+    'ch4':'Manque de vision claire','ch5':'Difficile de s\'organiser avec les autres',
+    's3-ey':'Étape 3 / 7 — Auto-évaluation','s3-h':'Comment tu te perçois',
     's3-p':'1 = pas du tout · 5 = tout à fait. Sois honnête, c\'est pour toi.',
-    matQs:['Je sais clairement ce que je veux accomplir dans les 3 prochains mois.',
+    'matQs':['Je sais clairement ce que je veux accomplir dans les 3 prochains mois.',
       'Je sais quoi prioriser chaque semaine.',
       'Je fais globalement ce que je planifie.',
       'Je reconnais quand je suis en surcharge.',
       'J\'ajuste mes plans quand quelque chose ne fonctionne pas.'],
-    matLow:'Pas du tout', matHigh:'Tout à fait',
-    matDims:['Clarté des objectifs','Capacité à prioriser','Régularité','Conscience des limites','Capacité d\'adaptation'],
-    's4-ey':'Étape 4 / 6 — Engagements', 's4-h':'Tes engagements principaux',
+    'matLow':'Pas du tout','matHigh':'Tout à fait',
+    'matDims':['Clarté des objectifs','Capacité à prioriser','Régularité','Conscience des limites','Capacité d\'adaptation'],
+    's4-ey':'Étape 4 / 7 — Engagements','s4-h':'Tes engagements principaux',
     's4-p':'Liste 3 à 5 projets ou responsabilités importants. Pour chacun, 3 questions rapides pour calculer ta priorité réelle.',
     'eng-ph':'Ex : Lancement du site, Rénovation maison, Formation…',
-    engQ1:'Impact si non avancé cette semaine', engQ1O:['Faible','Modéré','Critique'],
-    engQ2:'Personnes affectées', engQ2O:['Moi seul·e','Quelques-un·es','Beaucoup'],
-    engQ3:'Clarté de l\'objectif', engQ3O:['Flou','À peu près','Très clair'],
-    'eng-score':'Score', 'eng-add':'+ Ajouter un engagement', 'eng-remove':'Supprimer',
-    's5-ey':'Étape 5 / 6 — Préférences', 's5-h':'Comment tu veux travailler',
-    'freq-q':'À quelle fréquence veux-tu faire le point ?',
-    fq0:'Chaque jour (5–10 min le matin)', fq1:'2 à 3 fois par semaine', fq2:'Une fois par semaine',
+    'engQ1':'Impact si non avancé cette semaine','engQ1O':['Faible','Modéré','Critique'],
+    'engQ2':'Personnes affectées','engQ2O':['Moi seul·e','Quelques-un·es','Beaucoup'],
+    'engQ3':'Clarté de l\'objectif','engQ3O':['Flou','À peu près','Très clair'],
+    'eng-score':'Score','eng-add':'+ Ajouter un engagement','eng-remove':'Supprimer',
+    's5-ey':'Étape 5 / 7 — Préférences','s5-h':'Comment tu veux travailler',
+    'freq-q':'À quelle fréquence veux-tu faire le point sur tes projets ?',
+    'fq0':'Chaque jour (5–10 min le matin)','fq1':'2 à 3 fois par semaine','fq2':'Une fois par semaine',
     'tools-q':'Quels outils utilises-tu déjà ?',
-    tl0:'Google Calendar', tl1:'Notion', tl2:'Trello / Asana', tl3:'Excel / Sheets', tl4:'Agenda papier', tl5:'Pas d\'outil',
-    's5-next':'Voir mon profil →',
-    'gen-h':'Génération de ton profil…', 'gen-p':'Quelques secondes.',
-    gs1:'Analyse de ta maturité', gs2:'Calcul des priorités', gs3:'Construction du profil', gs4:'Rédaction des recommandations',
-    'rt-mat':'Maturité de planification', 'rt-pri':'Tes priorités (classées par score)',
-    'rt-forces':'Ce qui fonctionne bien chez toi', 'rt-axes':'Axes de développement', 'rt-reco':'Recommandations concrètes',
+    'tl0':'Google Calendar','tl1':'Notion','tl2':'Trello / Asana','tl3':'Excel / Sheets','tl4':'Agenda papier','tl5':'Pas d\'outil particulier',
+    's6-ey':'Étape 6 / 7 — Contexte de vie','s6-h':'Ton contexte et ton style de travail',
+    's6-p':'Ces informations permettent d\'affiner les données de ton profil.',
+    'resp-q':'As-tu des personnes ou des êtres dont tu prends soin régulièrement ?',
+    'rsp0':'Enfants','rsp1':'Adultes dépendants','rsp2':'Animaux','rsp3':'Personne en particulier',
+    'resp-imp-q':'Ces responsabilités impactent ton planning…',
+    'ri0t':'Beaucoup','ri0s':'Cela structure ou contrainte fortement mes disponibilités',
+    'ri1t':'Parfois','ri1s':'Selon les périodes',
+    'ri2t':'Peu ou pas','ri2s':'Je gère ça indépendamment de mon planning',
+    'style-head':'Comment tu fonctionnes généralement',
+    'styleQs':['Tes plages de concentration sont généralement…','Face à un imprévu, tu…','Tu travailles mieux avec…'],
+    'styleOpts':[['Courtes (< 30 min)','Moyennes (30–90 min)','Longues (> 90 min)'],
+      ['Es beaucoup perturbé·e','T\'adaptes progressivement','T\'adaptes facilement'],
+      ['Beaucoup de structure','Un cadre souple','Peu de structure']],
+    'res-q':'Ce qui te ressource',
+    'res0':'Nature / plein air','res1':'Lecture','res2':'Musique / art','res3':'Sport / mouvement',
+    'res4':'Création','res5':'Échanges / convivialité','res6':'Temps seul·e','res7':'Jeu / détente',
+    'res-freq-q':'Tu y as accès…',
+    'rf0t':'Souvent','rf0s':'Plusieurs fois par semaine',
+    'rf1t':'De temps en temps','rf1s':'Une à deux fois par semaine',
+    'rf2t':'Rarement','rf2s':'Moins d\'une fois par semaine',
+    's7-ey':'Étape 7 / 7 — Choix','s7-h':'Ce que tu veux recevoir',
+    's7-p':'Sélectionne les éléments à inclure dans ton profil. Tout est coché par défaut.',
+    's7-next':'Générer mon profil →',
+    'choiceItems':[
+      {v:'priorities',title:'Mes priorités classées',sub:'Les engagements les plus importants en ce moment'},
+      {v:'forces',title:'Ce qui fonctionne',sub:'Les points forts de ton mode de fonctionnement actuel'},
+      {v:'axes',title:'Des axes de développement',sub:'Les aspects à faire évoluer'},
+      {v:'recos',title:'Des recommandations pratiques',sub:'Des actions concrètes adaptées à ton profil'},
+      {v:'message',title:'Un message personnalisé',sub:'Une synthèse directement adressée à toi'}
+    ],
+    'gen-h':'Génération de ton profil…','gen-p':'Quelques secondes.',
+    'gs1':'Analyse de ta maturité','gs2':'Calcul des priorités','gs3':'Construction du profil','gs4':'Rédaction des éléments demandés',
+    'rt-mat':'Maturité de planification','rt-pri':'Tes priorités (classées par score)',
+    'rt-forces':'Ce qui fonctionne bien chez toi','rt-axes':'Axes de développement','rt-reco':'Recommandations pratiques',
     'cta-h':'Prêt·e à passer à l\'action ?',
-    'cta-p':'Découvre comment mettre en place un système de planification complet, adapté à ton profil.',
-    'cta-notion':'Configurer Notion →', 'cta-print':'🖨 Imprimer', 'cta-restart':'Recommencer',
-    next:'Continuer →', back:'← Retour'
+    'cta-p':'Découvre comment mettre en place un système de planification complet, adapté à ton profil et à tes outils.',
+    'cta-notion':'Configurer Notion →','cta-print':'🖨 Imprimer','cta-restart':'Recommencer',
+    'next':'Continuer →','back':'← Retour'
   },
   en: {
-    ll:'Language:', 'w-tag':'Free diagnostic · 10 min',
+    'll':'Language:','w-tag':'Free diagnostic · 10 min',
     'w-h1':'Find your planning profile',
-    'w-p':'A 6-step diagnostic to understand how you organize your life and projects — and get tailored recommendations.',
-    'w-cta':'Get started →', f1:'Personalized profile', f2:'Clarified priorities', f3:'Concrete action plan',
-    's1-ey':'Step 1 / 6 — Profile', 's1-h':'Let\'s get acquainted', 's1-p':'Your answers help personalize your diagnostic.',
-    'name-l':'What\'s your name?', 'name-ph':'Your first name…',
-    'ctx-l':'What are your main areas of activity?', multi:'(multiple choices)',
-    ctx0:'Professional projects', ctx1:'Family & parenting', ctx2:'Volunteering / non-profit',
-    ctx3:'Entrepreneurship', ctx4:'Learning & skill development', ctx5:'Other personal project',
-    's2-ey':'Step 2 / 6 — Situation', 's2-h':'Your current situation',
+    'w-p':'A 7-step diagnostic to understand how you organize your life and projects — and get tailored recommendations.',
+    'w-cta':'Get started →','f1':'Personalized profile','f2':'Clarified priorities','f3':'Tailored action plan',
+    's1-ey':'Step 1 / 7 — Profile','s1-h':'Let\'s get acquainted','s1-p':'Your answers help personalize your diagnostic.',
+    'name-l':'What\'s your name?','name-ph':'Your first name…',
+    'ctx-l':'What are your main areas of activity?','multi':'(multiple choices)',
+    'ctx0':'Professional projects','ctx1':'Family & parenting','ctx2':'Volunteering / non-profit',
+    'ctx3':'Entrepreneurship','ctx4':'Learning & skill development','ctx5':'Other personal project',
+    's2-ey':'Step 2 / 7 — Situation','s2-h':'Your current situation',
     'nb-q':'How many active commitments are you managing?',
-    nb0t:'1 to 3', nb0s:'A few well-defined projects',
-    nb1t:'4 to 7', nb1s:'Several fronts to manage',
-    nb2t:'8 or more', nb2s:'Many simultaneous commitments',
-    'mode-q':'You mainly work…', m0:'Alone', m1:'As a duo or family', m2:'With a small team',
+    'nb0t':'1 to 3','nb0s':'A few well-defined projects',
+    'nb1t':'4 to 7','nb1s':'Several fronts to manage',
+    'nb2t':'8 or more','nb2s':'Many simultaneous commitments',
+    'mode-q':'You mainly work…','m0':'Alone','m1':'As a duo or family','m2':'With a small team',
     'ch-q':'Your biggest challenge right now?',
-    ch0:'I don\'t know where to start', ch1:'I feel overwhelmed',
-    ch2:'I struggle to stay consistent', ch3:'My projects aren\'t moving fast enough',
-    ch4:'I lack clear vision', ch5:'Hard to organize with others',
-    's3-ey':'Step 3 / 6 — Self-assessment', 's3-h':'How you see yourself',
+    'ch0':'I don\'t know where to start','ch1':'I feel overwhelmed',
+    'ch2':'I struggle to stay consistent','ch3':'My projects aren\'t moving fast enough',
+    'ch4':'I lack clear vision','ch5':'Hard to organize with others',
+    's3-ey':'Step 3 / 7 — Self-assessment','s3-h':'How you see yourself',
     's3-p':'1 = not at all · 5 = completely. Be honest, this is for you.',
-    matQs:['I clearly know what I want to accomplish in the next 3 months.',
+    'matQs':['I clearly know what I want to accomplish in the next 3 months.',
       'I know what to prioritize each week.',
       'I generally do what I plan.',
       'I recognize when I am overloaded.',
       'I adjust my plans when something isn\'t working.'],
-    matLow:'Not at all', matHigh:'Completely',
-    matDims:['Goal clarity','Prioritization','Consistency','Self-awareness','Adaptability'],
-    's4-ey':'Step 4 / 6 — Commitments', 's4-h':'Your main commitments',
+    'matLow':'Not at all','matHigh':'Completely',
+    'matDims':['Goal clarity','Prioritization','Consistency','Self-awareness','Adaptability'],
+    's4-ey':'Step 4 / 7 — Commitments','s4-h':'Your main commitments',
     's4-p':'List 3 to 5 important projects or responsibilities. For each, 3 quick questions to calculate your real priority.',
     'eng-ph':'E.g. Website launch, Home renovation, Training…',
-    engQ1:'Impact if not progressed this week', engQ1O:['Low','Medium','Critical'],
-    engQ2:'People affected', engQ2O:['Just me','A few people','Many people'],
-    engQ3:'Clarity of objective', engQ3O:['Unclear','Somewhat clear','Very clear'],
-    'eng-score':'Score', 'eng-add':'+ Add a commitment', 'eng-remove':'Remove',
-    's5-ey':'Step 5 / 6 — Preferences', 's5-h':'How you want to work',
+    'engQ1':'Impact if not progressed this week','engQ1O':['Low','Medium','Critical'],
+    'engQ2':'People affected','engQ2O':['Just me','A few people','Many people'],
+    'engQ3':'Clarity of objective','engQ3O':['Unclear','Somewhat clear','Very clear'],
+    'eng-score':'Score','eng-add':'+ Add a commitment','eng-remove':'Remove',
+    's5-ey':'Step 5 / 7 — Preferences','s5-h':'How you want to work',
     'freq-q':'How often do you want to review your projects?',
-    fq0:'Every day (5–10 min in the morning)', fq1:'2 to 3 times a week', fq2:'Once a week',
+    'fq0':'Every day (5–10 min in the morning)','fq1':'2 to 3 times a week','fq2':'Once a week',
     'tools-q':'Which tools are you already using?',
-    tl0:'Google Calendar', tl1:'Notion', tl2:'Trello / Asana', tl3:'Excel / Sheets', tl4:'Paper agenda', tl5:'No tool',
-    's5-next':'See my profile →',
-    'gen-h':'Generating your profile…', 'gen-p':'A few seconds.',
-    gs1:'Analyzing your maturity', gs2:'Calculating priorities', gs3:'Building your profile', gs4:'Writing recommendations',
-    'rt-mat':'Planning maturity', 'rt-pri':'Your priorities (ranked by score)',
-    'rt-forces':'What you do well', 'rt-axes':'Areas for development', 'rt-reco':'Concrete recommendations',
+    'tl0':'Google Calendar','tl1':'Notion','tl2':'Trello / Asana','tl3':'Excel / Sheets','tl4':'Paper agenda','tl5':'No particular tool',
+    's6-ey':'Step 6 / 7 — Life context','s6-h':'Your context and work style',
+    's6-p':'This information helps refine your profile data.',
+    'resp-q':'Do you regularly care for people or beings?',
+    'rsp0':'Children','rsp1':'Dependent adults','rsp2':'Animals','rsp3':'No one in particular',
+    'resp-imp-q':'These responsibilities impact your planning…',
+    'ri0t':'A lot','ri0s':'They significantly structure or constrain my availability',
+    'ri1t':'Sometimes','ri1s':'Depending on the period',
+    'ri2t':'Little or not at all','ri2s':'I manage this independently from my planning',
+    'style-head':'How you generally function',
+    'styleQs':['Your focus periods are generally…','When something unexpected comes up, you…','You work best with…'],
+    'styleOpts':[['Short (< 30 min)','Medium (30–90 min)','Long (> 90 min)'],
+      ['Feel very disrupted','Adapt gradually','Adapt easily'],
+      ['A lot of structure','A flexible framework','Very little structure']],
+    'res-q':'What restores your energy',
+    'res0':'Nature / outdoors','res1':'Reading','res2':'Music / art','res3':'Sport / movement',
+    'res4':'Creating','res5':'Social connection','res6':'Time alone','res7':'Play / relaxation',
+    'res-freq-q':'You have access to this…',
+    'rf0t':'Often','rf0s':'Several times a week',
+    'rf1t':'Sometimes','rf1s':'Once or twice a week',
+    'rf2t':'Rarely','rf2s':'Less than once a week',
+    's7-ey':'Step 7 / 7 — Choices','s7-h':'What you want to receive',
+    's7-p':'Select the elements to include in your profile. Everything is checked by default.',
+    's7-next':'Generate my profile →',
+    'choiceItems':[
+      {v:'priorities',title:'My ranked priorities',sub:'The most important commitments right now'},
+      {v:'forces',title:'What works well',sub:'The strengths of your current way of working'},
+      {v:'axes',title:'Areas for development',sub:'Aspects to evolve'},
+      {v:'recos',title:'Practical recommendations',sub:'Concrete actions tailored to your profile'},
+      {v:'message',title:'A personalized summary',sub:'A synthesis addressed directly to you'}
+    ],
+    'gen-h':'Generating your profile…','gen-p':'A few seconds.',
+    'gs1':'Analyzing your maturity','gs2':'Calculating priorities','gs3':'Building your profile','gs4':'Writing selected elements',
+    'rt-mat':'Planning maturity','rt-pri':'Your priorities (ranked by score)',
+    'rt-forces':'What you do well','rt-axes':'Areas for development','rt-reco':'Practical recommendations',
     'cta-h':'Ready to take action?',
     'cta-p':'Discover how to set up a complete planning system tailored to your profile.',
-    'cta-notion':'Set up Notion →', 'cta-print':'🖨 Print', 'cta-restart':'Start over',
-    next:'Continue →', back:'← Back'
+    'cta-notion':'Set up Notion →','cta-print':'🖨 Print','cta-restart':'Start over',
+    'next':'Continue →','back':'← Back'
   }
 };
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
 let lang = 'fr';
-let S = { name:'', contexts:[], nb:'', mode:'', challenges:[], mat:[0,0,0,0,0], engs:[], freq:'', tools:[] };
-let engs = []; // [{id,name,q1,q2,q3}]
+let S = {
+  name:'', contexts:[], nb:'', mode:'', challenges:[], mat:[0,0,0,0,0],
+  engs:[], freq:'', tools:[],
+  resp:[], respImpact:'', style:[0,0,0], ressource:[], ressourceFreq:'',
+  choices:['priorities','forces','axes','recos','message']
+};
+let engs = [];
+const SCREENS = ['s-welcome','s-profile','s-situation','s-maturity','s-engagements','s-preferences','s-context','s-choices','s-generating','s-result'];
 
-const SCREENS = ['s-welcome','s-profile','s-situation','s-maturity','s-engagements','s-preferences','s-generating','s-result'];
-
-// ─── LANGUAGE ─────────────────────────────────────────────────────────────────
 function setLang(l) {
   lang = l;
   document.querySelectorAll('.lb').forEach(b => b.classList.toggle('on', b.textContent.includes(l.toUpperCase())));
@@ -533,10 +606,11 @@ function applyT() {
     if (c[k] !== undefined) el.placeholder = c[k];
   });
   buildMatQs();
+  buildStyleQs();
   renderEngs();
+  buildChoices();
 }
 
-// ─── NAVIGATION ───────────────────────────────────────────────────────────────
 function go(id) {
   document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
@@ -545,15 +619,13 @@ function go(id) {
   const total = SCREENS.length - 2;
   const pct = i <= 0 ? 0 : i >= total ? 100 : Math.round((i / (total - 1)) * 100);
   document.getElementById('prog').style.width = pct + '%';
-  const labels = { 's-profile':'1/6','s-situation':'2/6','s-maturity':'3/6','s-engagements':'4/6','s-preferences':'5/6','s-result':'✓' };
+  const labels = {'s-profile':'1/7','s-situation':'2/7','s-maturity':'3/7','s-engagements':'4/7','s-preferences':'5/7','s-context':'6/7','s-choices':'7/7','s-result':'✓'};
   document.getElementById('step-info').textContent = labels[id] || '';
 }
 
-// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
 function tgl(el) { el.classList.toggle('on'); }
 function selR(gid, el) { document.querySelectorAll('#'+gid+' .rc').forEach(r => r.classList.remove('on')); el.classList.add('on'); }
 
-// ─── MATURITY ─────────────────────────────────────────────────────────────────
 function buildMatQs() {
   const c = T[lang];
   document.getElementById('mat-qs').innerHTML = c.matQs.map((q,i) => `
@@ -563,17 +635,43 @@ function buildMatQs() {
       <div class="sb-legend"><span>${c.matLow}</span><span>${c.matHigh}</span></div>
     </div>`).join('');
 }
-
 function setMat(i, v) { S.mat[i] = v; buildMatQs(); }
 
-// ─── ENGAGEMENTS ──────────────────────────────────────────────────────────────
+function buildStyleQs() {
+  const c = T[lang];
+  document.getElementById('style-qs').innerHTML = c.styleQs.map((q,i) => `
+    <div class="style-q">
+      <div class="sq">${q}</div>
+      <div class="eq-btns">${c.styleOpts[i].map((t,j) => `<button class="eq-btn ${S.style[i]===j+1?'on':''}" onclick="setStyle(${i},${j+1})">${t}</button>`).join('')}</div>
+    </div>`).join('');
+}
+function setStyle(i, v) { S.style[i] = v; buildStyleQs(); }
+
+function buildChoices() {
+  const c = T[lang];
+  document.getElementById('choices-list').innerHTML = (c.choiceItems || []).map(item => `
+    <div class="choice-item ${S.choices.includes(item.v)?'on':''}" data-v="${item.v}" onclick="tglChoice(this)">
+      <div class="choice-chk">${S.choices.includes(item.v)?'✓':''}</div>
+      <div class="choice-body">
+        <div class="choice-title">${item.title}</div>
+        <div class="choice-sub">${item.sub}</div>
+      </div>
+    </div>`).join('');
+}
+function tglChoice(el) {
+  el.classList.toggle('on');
+  const v = el.dataset.v;
+  if (S.choices.includes(v)) S.choices = S.choices.filter(c => c !== v);
+  else S.choices.push(v);
+  el.querySelector('.choice-chk').textContent = S.choices.includes(v) ? '✓' : '';
+}
+
 function addEng() {
   if (engs.length >= 5) return;
   engs.push({ id:'e'+Date.now(), name:'', q1:0, q2:0, q3:0 });
   renderEngs();
-  setTimeout(() => { const inp = document.querySelector(`#eng-list .eng:last-child input`); if(inp){inp.focus();const body=inp.closest('.eng-body');if(body)body.classList.add('open');} }, 80);
+  setTimeout(() => { const inp = document.querySelector('#eng-list .eng:last-child input'); if(inp){inp.focus();const b=inp.closest('.eng-body');if(b)b.classList.add('open');} }, 80);
 }
-
 function removeEng(id) { engs = engs.filter(e=>e.id!==id); renderEngs(); }
 function setEQ(id, f, v) { const e=engs.find(x=>x.id===id); if(e){e[f]=v;} renderEngs(); }
 function engScore(e) { return (!e.q1||!e.q2||!e.q3) ? null : e.q1*e.q2*e.q3; }
@@ -582,8 +680,7 @@ function updateEngName(id, v) { const e=engs.find(x=>x.id===id); if(e) e.name=v;
 
 function renderEngs() {
   const c = T[lang];
-  const sortedForDisplay = [...engs];
-  document.getElementById('eng-list').innerHTML = sortedForDisplay.map((e,i) => {
+  document.getElementById('eng-list').innerHTML = engs.map((e,i) => {
     const sc = engScore(e);
     return `<div class="eng" data-id="${e.id}">
       <div class="eng-top" onclick="toggleEngBody('${e.id}')">
@@ -594,12 +691,9 @@ function renderEngs() {
       <div class="eng-body${e.name?' open':''}" id="b${e.id}">
         <div style="padding-top:12px;">
           <input type="text" placeholder="${c['eng-ph']}" value="${e.name}" oninput="updateEngName('${e.id}',this.value)" style="margin-bottom:12px;font-size:14px;">
-          <div class="eq">
-            <label>${c.engQ1}</label>
-            <div class="eq-btns">${c.engQ1O.map((t,j)=>`<button class="eq-btn${e.q1===j+1?' on':''}" onclick="setEQ('${e.id}','q1',${j+1})">${t}</button>`).join('')}</div>
-          </div>
-          <div class="eq"><label>${c.engQ2}</label><div class="eq-btns">${c.engQ2O.map((t,j)=>`<button class="eq-btn${e.q2===j+1?' on':''}" onclick="setEQ('${e.id}','q2',${j+1})">${t}</button>`).join('')}</div></div>
-          <div class="eq"><label>${c.engQ3}</label><div class="eq-btns">${c.engQ3O.map((t,j)=>`<button class="eq-btn${e.q3===j+1?' on':''}" onclick="setEQ('${e.id}','q3',${j+1})">${t}</button>`).join('')}</div></div>
+          <div class="eq"><label>${c['engQ1']}</label><div class="eq-btns">${c['engQ1O'].map((t,j)=>`<button class="eq-btn${e.q1===j+1?' on':''}" onclick="setEQ('${e.id}','q1',${j+1})">${t}</button>`).join('')}</div></div>
+          <div class="eq"><label>${c['engQ2']}</label><div class="eq-btns">${c['engQ2O'].map((t,j)=>`<button class="eq-btn${e.q2===j+1?' on':''}" onclick="setEQ('${e.id}','q2',${j+1})">${t}</button>`).join('')}</div></div>
+          <div class="eq"><label>${c['engQ3']}</label><div class="eq-btns">${c['engQ3O'].map((t,j)=>`<button class="eq-btn${e.q3===j+1?' on':''}" onclick="setEQ('${e.id}','q3',${j+1})">${t}</button>`).join('')}</div></div>
           ${sc !== null ? `<div style="text-align:right;font-size:11px;font-weight:700;color:var(--gold);margin-top:8px;">${c['eng-score']}: ${sc}/27</div>` : ''}
           ${engs.length>1 ? `<button class="eng-remove" onclick="removeEng('${e.id}')">${c['eng-remove']}</button>` : ''}
         </div>
@@ -609,14 +703,12 @@ function renderEngs() {
   document.getElementById('add-eng-btn').style.display = engs.length>=5 ? 'none' : '';
 }
 
-// ─── VALIDATION ───────────────────────────────────────────────────────────────
 function valProfile() {
   S.name = document.getElementById('inp-name').value.trim();
   S.contexts = [...document.querySelectorAll('#ctx-grid .cc.on')].map(e=>e.dataset.v);
   if (!S.name) { document.getElementById('inp-name').focus(); return; }
   go('s-situation');
 }
-
 function valSit() {
   const nb = document.querySelector('#sit-nb .rc.on');
   const mode = document.querySelector('#sit-mode .rc.on');
@@ -625,34 +717,43 @@ function valSit() {
   S.challenges = [...document.querySelectorAll('#ch-grid .cc.on')].map(e=>e.dataset.v);
   go('s-maturity'); buildMatQs();
 }
-
 function valMat() {
   if (S.mat.some(v=>v===0)) return;
   if (!engs.length) addEng();
   renderEngs(); go('s-engagements');
 }
-
 function valEng() {
   const named = engs.filter(e=>e.name.trim());
   if (named.length < 2) return;
   S.engs = named; go('s-preferences');
 }
-
 function valPref() {
   const freq = document.querySelector('#pref-freq .rc.on');
   if (!freq) return;
   S.freq = freq.dataset.v;
   S.tools = [...document.querySelectorAll('#tools-grid .cc.on')].map(e=>e.dataset.v);
+  go('s-context'); buildStyleQs();
+}
+function valContext() {
+  S.resp = [...document.querySelectorAll('#resp-grid .cc.on')].map(e=>e.dataset.v);
+  const ri = document.querySelector('#resp-impact .rc.on');
+  S.respImpact = ri ? ri.dataset.v : 'low';
+  S.ressource = [...document.querySelectorAll('#res-grid .cc.on')].map(e=>e.dataset.v);
+  const rf = document.querySelector('#res-freq .rc.on');
+  S.ressourceFreq = rf ? rf.dataset.v : '';
+  go('s-choices'); buildChoices();
+}
+function valChoices() {
+  if (!S.choices.length) S.choices = ['priorities','forces','axes','recos','message'];
   generateProfile();
 }
 
-// ─── GENERATE PROFILE ─────────────────────────────────────────────────────────
 async function generateProfile() {
   go('s-generating');
   const ids = ['gs1','gs2','gs3','gs4'];
   let si = 0;
   const tick = setInterval(() => {
-    if (si > 0) { const prev=document.getElementById(ids[si-1]); if(prev){prev.classList.remove('active');prev.classList.add('done');} }
+    if (si > 0) { const p=document.getElementById(ids[si-1]); if(p){p.classList.remove('active');p.classList.add('done');} }
     if (si < ids.length) { document.getElementById(ids[si]).classList.add('active'); si++; }
     else clearInterval(tick);
   }, 700);
@@ -660,46 +761,47 @@ async function generateProfile() {
   const c = T[lang];
   const matAvg = (S.mat.reduce((a,b)=>a+b,0)/5).toFixed(1);
   const scored = [...S.engs].filter(e=>e.q1&&e.q2&&e.q3).sort((a,b)=>(b.q1*b.q2*b.q3)-(a.q1*a.q2*a.q3));
-  const unscoredEngs = S.engs.filter(e=>!e.q1||!e.q2||!e.q3);
-
-  const ctxMap = {pro:'projets professionnels',family:'famille & parentalité',asso:'associatif/bénévolat',biz:'entrepreneuriat',learning:'formation',other:'projets personnels',
-    'professional projects':'professional projects','family & parenting':'family & parenting'};
+  const ctxMap = {pro:'projets professionnels',family:'famille & parentalité',asso:'associatif/bénévolat',biz:'entrepreneuriat',learning:'formation',other:'projets personnels'};
   const ctxStr = S.contexts.map(v=>ctxMap[v]||v).join(', ') || 'projets variés';
+  const styleLabels = c.styleQs.map((q,i) => S.style[i] ? `${q} ${c.styleOpts[i][S.style[i]-1]}` : '').filter(Boolean).join(' | ');
+  const respStr = S.resp.filter(v=>v!=='none-resp').join(', ') || (lang==='fr' ? 'aucune précisée' : 'none specified');
+
+  const schemaFields = [];
+  if (S.choices.includes('priorities')) schemaFields.push('"priorites":[{"nom":"...","raison":"..."},{"nom":"...","raison":"..."},{"nom":"...","raison":"..."}]');
+  if (S.choices.includes('forces')) schemaFields.push('"forces":["force 1","force 2","force 3"]');
+  if (S.choices.includes('axes')) schemaFields.push('"axes":["axe 1","axe 2","axe 3"]');
+  if (S.choices.includes('recos')) schemaFields.push('"recommandations":["reco 1","reco 2","reco 3","reco 4","reco 5"]');
+  if (S.choices.includes('message')) schemaFields.push('"message":"synthèse personnalisée"');
 
   const prompt = lang==='fr'
-    ? `Tu es un expert en planification personnelle et coaching de vie.
-Analyse ce profil et génère un diagnostic personnalisé EN FRANÇAIS.
+    ? `Tu es un expert en planification personnelle et coaching de vie. Analyse ce profil et génère un diagnostic personnalisé EN FRANÇAIS.
 Prénom : ${S.name}
 Contextes : ${ctxStr}
-Engagements actifs : ${S.nb}
-Mode de travail : ${S.mode}
+Engagements actifs : ${S.nb} | Mode de travail : ${S.mode}
 Défis : ${S.challenges.map(v=>c['ch'+['prioritize','overload','consistency','slow','vision','others'].indexOf(v)]||v).join(', ')||'non précisés'}
-Scores de maturité (5 dimensions, 1-5 chacune) : ${S.mat.join(', ')} — moyenne: ${matAvg}/5
-Dimensions : ${c.matDims.join(' / ')}
-Engagements principaux (triés par score de priorité calculé) :
-${scored.map((e,i)=>`${i+1}. ${e.name} [Impact:${e.q1} × Portée:${e.q2} × Clarté:${e.q3} = Score:${e.q1*e.q2*e.q3}/27]`).join('\n')}
-${unscoredEngs.length?'Autres engagements non scorés : '+unscoredEngs.map(e=>e.name).join(', '):''}
-Fréquence de suivi souhaitée : ${S.freq}
-Outils utilisés : ${S.tools.join(', ')||'aucun'}
-
+Maturité (5 dimensions 1-5) : ${S.mat.join(', ')} — moyenne: ${matAvg}/5 — dimensions: ${c.matDims.join(' / ')}
+Engagements (triés par score RICE) : ${scored.map((e,i)=>`${i+1}. ${e.name} [${e.q1}×${e.q2}×${e.q3}=${e.q1*e.q2*e.q3}/27]`).join(' | ')||'non renseignés'}
+Fréquence de suivi : ${S.freq} | Outils : ${S.tools.join(', ')||'aucun'}
+Responsabilités : ${respStr} — impact planning : ${S.respImpact||'non précisé'}
+Style de travail : ${styleLabels||'non précisé'}
+Ressourcement : ${S.ressource.join(', ')||'non précisé'} — accès : ${S.ressourceFreq||'non précisé'}
+Éléments demandés : ${S.choices.join(', ')}
 Réponds UNIQUEMENT avec un JSON valide, sans backticks ni texte autour :
-{"emoji":"1 emoji représentatif","type":"2-4 mots inclusifs (ex: Stratège Équilibré·e, Orchestrateur·rice Débordé·e...)","tagline":"phrase de 8-12 mots qui capture l'essence","maturite":{"interpretation":"2 phrases honnêtes sur le niveau de maturité global"},"priorites":[{"nom":"nom de l'engagement","raison":"1 phrase sur pourquoi c'est prioritaire maintenant"},{"nom":"...","raison":"..."},{"nom":"...","raison":"..."}],"forces":["force 1","force 2","force 3"],"axes":["axe de dev 1","axe de dev 2","axe de dev 3"],"recommandations":["reco concrète 1 (1-2 lignes)","reco 2","reco 3","reco 4","reco 5"],"message":"2-3 phrases personnalisées pour ${S.name}, encourageantes, directes, en tutoyant"}`
-    : `You are an expert in personal planning and life coaching.
-Analyze this profile and generate a personalized diagnostic IN ENGLISH.
+{"emoji":"1 emoji","type":"2-4 mots inclusifs","tagline":"8-12 mots","maturite":{"interpretation":"2 phrases sur la maturité globale"},${schemaFields.join(',')}}`
+    : `You are an expert in personal planning and life coaching. Analyze this profile and generate a personalized diagnostic IN ENGLISH.
 Name: ${S.name}
 Contexts: ${ctxStr}
-Active commitments: ${S.nb}
-Work mode: ${S.mode}
+Active commitments: ${S.nb} | Work mode: ${S.mode}
 Challenges: ${S.challenges.join(', ')||'not specified'}
-Maturity scores (5 dimensions, 1-5 each): ${S.mat.join(', ')} — average: ${matAvg}/5
-Dimensions: ${c.matDims.join(' / ')}
-Main commitments (sorted by calculated priority score):
-${scored.map((e,i)=>`${i+1}. ${e.name} [Impact:${e.q1} × Reach:${e.q2} × Clarity:${e.q3} = Score:${e.q1*e.q2*e.q3}/27]`).join('\n')}
-Preferred review frequency: ${S.freq}
-Tools used: ${S.tools.join(', ')||'none'}
-
+Maturity (5 dimensions 1-5): ${S.mat.join(', ')} — average: ${matAvg}/5 — dimensions: ${c.matDims.join(' / ')}
+Commitments (sorted by RICE score): ${scored.map((e,i)=>`${i+1}. ${e.name} [${e.q1}×${e.q2}×${e.q3}=${e.q1*e.q2*e.q3}/27]`).join(' | ')||'not provided'}
+Review frequency: ${S.freq} | Tools: ${S.tools.join(', ')||'none'}
+Care responsibilities: ${respStr} — impact on planning: ${S.respImpact||'not specified'}
+Work style: ${styleLabels||'not specified'}
+Resourcing activities: ${S.ressource.join(', ')||'not specified'} — access frequency: ${S.ressourceFreq||'not specified'}
+Requested sections: ${S.choices.join(', ')}
 Reply ONLY with a valid JSON object, no backticks or surrounding text:
-{"emoji":"1 representative emoji","type":"2-4 inclusive words (e.g. The Overwhelmed Strategist, The Focused Builder...)","tagline":"8-12 word phrase capturing the essence","maturite":{"interpretation":"2 honest sentences about overall maturity level"},"priorites":[{"nom":"commitment name","raison":"1 sentence on why this is a top priority right now"},{"nom":"...","raison":"..."},{"nom":"...","raison":"..."}],"forces":["strength 1","strength 2","strength 3"],"axes":["growth area 1","growth area 2","growth area 3"],"recommandations":["concrete recommendation 1 (1-2 lines)","rec 2","rec 3","rec 4","rec 5"],"message":"2-3 personalized encouraging sentences addressing ${S.name} directly"}`;
+{"emoji":"1 emoji","type":"2-4 inclusive words","tagline":"8-12 words","maturite":{"interpretation":"2 sentences on overall maturity"},${schemaFields.join(',')}}`;
 
   try {
     const r = await fetch(CLAUDE_PROXY, {
@@ -729,25 +831,27 @@ function renderProfile(p, sorted) {
   document.getElementById('r-emoji').textContent = p.emoji || '🎯';
   document.getElementById('r-type').textContent = p.type || '';
   document.getElementById('r-tagline').textContent = p.tagline || '';
-
-  // Maturity bars
-  const colors = (v) => v<=2?'#C02A2A':v<=3?'#D97706':'#1A7F5A';
+  const colors = v => v<=2?'#C02A2A':v<=3?'#D97706':'#1A7F5A';
   document.getElementById('r-mat-bars').innerHTML =
-    c.matDims.map((dim,i) => {
-      const v=S.mat[i]||0, pct=(v/5)*100;
+    c.matDims.map((dim,i) => { const v=S.mat[i]||0,pct=(v/5)*100;
       return `<div class="mat-row"><div class="mat-top"><span class="mat-dim">${dim}</span><span class="mat-val" style="color:${colors(v)}">${v}/5</span></div><div class="mat-bg"><div class="mat-fill" style="width:${pct}%;background:${colors(v)};"></div></div></div>`;
     }).join('') + (p.maturite?.interpretation ? `<p style="font-size:13px;color:var(--fog);margin-top:10px;line-height:1.6;">${p.maturite.interpretation}</p>` : '');
-
-  // Priorities
-  const prs = p.priorites || sorted.slice(0,3).map(e=>({nom:e.name,raison:''}));
-  document.getElementById('r-priorities').innerHTML = prs.slice(0,3).map((pr,i) =>
-    `<div class="pr-row"><div class="pr-num pr-${i+1}">${i+1}</div><div class="pr-body"><h4>${pr.nom}</h4>${pr.raison?`<p>${pr.raison}</p>`:''}</div></div>`).join('');
-
+  document.getElementById('card-priorities').style.display = S.choices.includes('priorities') ? '' : 'none';
+  if (S.choices.includes('priorities')) {
+    const prs = p.priorites || sorted.slice(0,3).map(e=>({nom:e.name,raison:''}));
+    document.getElementById('r-priorities').innerHTML = prs.slice(0,3).map((pr,i) =>
+      `<div class="pr-row"><div class="pr-num pr-${i+1}">${i+1}</div><div class="pr-body"><h4>${pr.nom}</h4>${pr.raison?`<p>${pr.raison}</p>`:''}</div></div>`).join('');
+  }
   const toLi = arr => (arr||[]).map(x=>`<li>${x}</li>`).join('');
+  document.getElementById('card-forces').style.display = S.choices.includes('forces') ? '' : 'none';
   document.getElementById('r-forces').innerHTML = toLi(p.forces);
+  document.getElementById('card-axes').style.display = S.choices.includes('axes') ? '' : 'none';
   document.getElementById('r-axes').innerHTML = toLi(p.axes);
+  document.getElementById('card-recos').style.display = S.choices.includes('recos') ? '' : 'none';
   document.getElementById('r-recos').innerHTML = toLi(p.recommandations);
-  document.getElementById('r-msg').textContent = p.message || '';
+  const msgEl = document.getElementById('r-msg');
+  if (S.choices.includes('message') && p.message) { msgEl.style.display=''; msgEl.textContent = p.message; }
+  else msgEl.style.display = 'none';
 }
 
 function renderFallback(sorted, matAvg) {
@@ -757,25 +861,23 @@ function renderFallback(sorted, matAvg) {
   document.getElementById('r-tagline').textContent = lang==='fr'?`Maturité moyenne : ${matAvg}/5`:`Average maturity: ${matAvg}/5`;
   const colors = v=>v<=2?'#C02A2A':v<=3?'#D97706':'#1A7F5A';
   document.getElementById('r-mat-bars').innerHTML = c.matDims.map((d,i)=>{const v=S.mat[i]||0,pct=(v/5)*100;return `<div class="mat-row"><div class="mat-top"><span class="mat-dim">${d}</span><span class="mat-val" style="color:${colors(v)}">${v}/5</span></div><div class="mat-bg"><div class="mat-fill" style="width:${pct}%;background:${colors(v)};"></div></div></div>`;}).join('');
-  document.getElementById('r-priorities').innerHTML = sorted.slice(0,3).map((e,i)=>`<div class="pr-row"><div class="pr-num pr-${i+1}">${i+1}</div><div class="pr-body"><h4>${e.name}</h4><p>Score : ${e.q1*e.q2*e.q3}/27</p></div></div>`).join('');
-  document.getElementById('r-forces').innerHTML = '';
-  document.getElementById('r-axes').innerHTML = '';
-  document.getElementById('r-recos').innerHTML = '';
-  document.getElementById('r-msg').textContent = lang==='fr'?`${S.name}, ton diagnostic est prêt. Continue sur ta lancée — chaque petit pas compte.`:`${S.name}, your diagnostic is ready. Keep going — every small step counts.`;
+  document.getElementById('card-priorities').style.display = '';
+  document.getElementById('r-priorities').innerHTML = sorted.slice(0,3).map((e,i)=>`<div class="pr-row"><div class="pr-num pr-${i+1}">${i+1}</div><div class="pr-body"><h4>${e.name}</h4></div></div>`).join('');
+  ['card-forces','card-axes','card-recos'].forEach(id => document.getElementById(id).style.display = 'none');
+  const msgEl = document.getElementById('r-msg');
+  msgEl.style.display = ''; msgEl.textContent = lang==='fr'?`${S.name}, ton diagnostic est prêt.`:`${S.name}, your diagnostic is ready.`;
 }
 
 function restart() {
-  S = {name:'',contexts:[],nb:'',mode:'',challenges:[],mat:[0,0,0,0,0],engs:[],freq:'',tools:[]};
+  S = {name:'',contexts:[],nb:'',mode:'',challenges:[],mat:[0,0,0,0,0],engs:[],freq:'',tools:[],
+       resp:[],respImpact:'',style:[0,0,0],ressource:[],ressourceFreq:'',choices:['priorities','forces','axes','recos','message']};
   engs = [];
   document.getElementById('inp-name').value = '';
-  document.querySelectorAll('.cc.on,.rc.on').forEach(el=>el.classList.remove('on'));
-  buildMatQs(); renderEngs(); go('s-welcome');
+  document.querySelectorAll('.cc.on,.rc.on,.choice-item.on').forEach(el=>el.classList.remove('on'));
+  buildMatQs(); buildStyleQs(); renderEngs(); buildChoices(); go('s-welcome');
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-buildMatQs();
-applyT();
-
+buildMatQs(); buildStyleQs(); buildChoices(); applyT();
 document.getElementById('inp-name').addEventListener('keydown', e => { if(e.key==='Enter') valProfile(); });
 </script>
 </body>

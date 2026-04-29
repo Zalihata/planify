@@ -407,7 +407,7 @@ input[type=text]::placeholder{color:var(--fog)}
       <h3 data-key="cta-h">Prêt·e à passer à l'action ?</h3>
       <p data-key="cta-p">Découvre comment mettre en place un système de planification complet, adapté à ton profil et à tes outils.</p>
       <div class="cta-btns">
-        <button class="btn-gold-sm" data-key="cta-notion" onclick="alert('Lien Notion à configurer')">Configurer Notion →</button>
+        <button class="btn-gold-sm" data-key="cta-notion" onclick="goSetup()">Configurer Notion →</button>
         <button class="btn-light" onclick="window.print()" data-key="cta-print">🖨 Imprimer</button>
         <button class="btn-light" onclick="restart()" data-key="cta-restart">Recommencer</button>
       </div>
@@ -827,11 +827,20 @@ Reply ONLY with a valid JSON object, no backticks or surrounding text:
   }
 }
 
+function goSetup() { window.location.href = '/setup.html'; }
+
 function renderProfile(p, sorted) {
   const c = T[lang];
   document.getElementById('r-emoji').textContent = p.emoji || '🎯';
   document.getElementById('r-type').textContent = p.type || '';
   document.getElementById('r-tagline').textContent = p.tagline || '';
+  // Save to localStorage for setup.html
+  try {
+    localStorage.setItem('planify_diag', JSON.stringify({
+      name: S.name, lang, profile: { emoji: p.emoji, type: p.type },
+      engagements: sorted, contexts: S.contexts, mat: S.mat, freq: S.freq, tools: S.tools
+    }));
+  } catch(e) {}
   const colors = v => v<=2?'#C02A2A':v<=3?'#D97706':'#1A7F5A';
   document.getElementById('r-mat-bars').innerHTML =
     c.matDims.map((dim,i) => { const v=S.mat[i]||0,pct=(v/5)*100;
